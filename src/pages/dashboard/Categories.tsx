@@ -113,7 +113,7 @@ const Categories = () => {
         <div>
             <Flex className="my-2" vertical={false} gap={10} align="center" justify="space-between">
                 <div>
-                    <h1 className="text-3xl text-primary font-semibold">Manage Categories</h1>
+                    <h1 className="text-3xl text-primary font-semibold">Manage Classes</h1>
                 </div>
 
                 <div
