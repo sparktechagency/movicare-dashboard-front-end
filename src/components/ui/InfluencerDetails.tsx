@@ -1,4 +1,3 @@
-import { Button, Divider } from 'antd';
 
 type BookingHistory = {
   serial: number;

@@ -1,11 +1,9 @@
-import { Table, Dropdown, Input, Select, Button } from 'antd';
-import { BsThreeDotsVertical, BsTrash } from 'react-icons/bs';
-import { SearchOutlined } from '@ant-design/icons';
+import { Table, Input, Button } from 'antd';
+import {  BsTrash } from 'react-icons/bs';
 import { useState } from 'react';
 import CustomModal from '../../components/shared/CustomModal';
 import BrandDetails from '../../components/ui/BrandDetails';
 import { FiSearch } from 'react-icons/fi';
-const { Option } = Select;
 // Sample data
 
 const Users = () => {
