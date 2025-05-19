@@ -100,7 +100,7 @@ const handleDelete = (record: any) => {
         <div className="">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl text-primary font-semibold">All Users</h1>
+                    <h1 className="text-2xl text-primary font-semibold">All Users</h1>
                 </div>
                 <div className="flex items-center gap-5 justify-end mb-5">
                     <Input

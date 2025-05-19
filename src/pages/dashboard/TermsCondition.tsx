@@ -25,7 +25,7 @@ const TermsCondition = () => {
                 }}
             >
                 <div>
-                    <h3 className="text-3xl text-primary font-semibold">Terms and Conditions</h3>
+                    <h3 className="text-2xl text-primary font-semibold">Terms and Conditions</h3>
                 </div>
             </div>
             <div>

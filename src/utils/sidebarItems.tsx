@@ -1,11 +1,11 @@
 import { BiCategory } from 'react-icons/bi';
 import { TSidebarItem } from './generateSidebarItems';
-import {  AiOutlineQuestionCircle, AiOutlineStar } from 'react-icons/ai';
+import {  AiOutlineDollarCircle, AiOutlineQuestionCircle, AiOutlineStar } from 'react-icons/ai';
 import { IoBarChartOutline } from 'react-icons/io5';
-import { RiUserStarLine } from 'react-icons/ri';
-import { BsMegaphone } from 'react-icons/bs';
-import { TbLogout } from 'react-icons/tb';
+import { TbLogout, TbMessage2Check } from 'react-icons/tb';
 import { HiOutlineUserGroup } from 'react-icons/hi2';
+import { CiViewList } from 'react-icons/ci'; 
+
 const sidebarItems: TSidebarItem[] = [
     {
         key: 'analytics',
@@ -20,10 +20,10 @@ const sidebarItems: TSidebarItem[] = [
         icon: <HiOutlineUserGroup size={24} />,
     },
     {
-        key: 'influencer',
-        label: 'Influencer',
-        path: 'influencer',
-        icon: <RiUserStarLine size={24} />,
+        key: 'services',
+        label: 'Services',
+        path: 'services',
+        icon: <CiViewList size={24} />,
     },
     {
         key: 'create-class',
@@ -32,16 +32,22 @@ const sidebarItems: TSidebarItem[] = [
         icon: <BiCategory size={24} />,
     },
     {
+        key: 'booking-history',
+        label: 'Booking History',
+        path: 'booking-history',
+        icon: <TbMessage2Check size={24} />,
+    },
+    {
         key: 'reviews',
         label: 'Reviews',
         path: 'reviews',
         icon: <AiOutlineStar size={24} />,
     },
     {
-        key: 'campaign',
-        label: 'Campaign',
-        path: 'campaign',
-        icon: <BsMegaphone size={24} />,
+        key: 'transactions',
+        label: 'Transactions',
+        path: 'transactions',
+        icon: <AiOutlineDollarCircle size={24} />,
     },
     // {
     //     key: 'add-admin',

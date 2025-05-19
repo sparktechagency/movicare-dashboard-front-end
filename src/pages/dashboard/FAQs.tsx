@@ -33,7 +33,7 @@ const FAQs = () => {
         <div className=' pt-5 px-3'>
             <Flex vertical={false} gap={10} align="center" justify="space-between">
                 <div>
-                    <h1 className="text-3xl text-primary font-semibold">FAQs</h1>
+                    <h1 className="text-2xl text-primary font-semibold">FAQs</h1>
                 </div>
 
                 <div

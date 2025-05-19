@@ -100,7 +100,7 @@ const Review = () => {
     return (
         <div className="">
             <div className="my-3">
-                <h1 className="text-3xl text-primary font-semibold">Manage Reviews</h1>
+                <h1 className="text-2xl text-primary font-semibold">Manage Reviews</h1>
             </div>
             <Table columns={columns} dataSource={data} rowClassName="hover:bg-gray-100" />
             <CustomModal

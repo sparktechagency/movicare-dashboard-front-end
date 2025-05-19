@@ -4,11 +4,7 @@ import Dashboard from '../pages/dashboard/dashboard/Dashboard';
 import MakeAdmin from '../pages/dashboard/MakeAdmin';
 import Login from '../pages/authentication/Login';
 import ErrorPage from '../pages/error/ErrorPage';
-
-import Influencer from '../pages/dashboard/Influencer';
-import Categories from '../pages/dashboard/Categories';
 import Review from '../pages/dashboard/Review';
-import Campaign from '../pages/dashboard/Campaign';
 import TermsCondition from '../pages/dashboard/TermsCondition';
 import FAQs from '../pages/dashboard/FAQs';
 import Notification from '../pages/dashboard/Notification';
@@ -18,6 +14,10 @@ import NewPassword from '../pages/authentication/NewPassword';
 import Profile from '../pages/dashboard/profile/Profile';
 import Privacy from '../pages/dashboard/Privacy';
 import Users from '../pages/dashboard/Users';
+import CreateClasses from '../pages/dashboard/CreateClasses';
+import Services from '../pages/dashboard/Services';
+import BookingHistory from '../pages/dashboard/BookingHistory';
+import Transactions from '../pages/dashboard/Transactions';
 
 const router = createBrowserRouter([
     {
@@ -27,10 +27,11 @@ const router = createBrowserRouter([
         children: [
             { path: '', element: <Dashboard /> },
             { path: 'users', element: <Users /> },
-            { path: 'influencer', element: <Influencer /> },
-            { path: 'create-class', element: <Categories /> },
+            { path: 'booking-history', element: <BookingHistory /> },
+            { path: 'services', element: <Services /> },
+            { path: 'create-class', element: <CreateClasses /> },
             { path: 'reviews', element: <Review /> },
-            { path: 'campaign', element: <Campaign /> },
+            { path: 'transactions', element: <Transactions /> },
             { path: 'make-admin', element: <MakeAdmin /> },
             { path: 'terms', element: <TermsCondition /> },
             { path: 'privacy', element: <Privacy /> },
