@@ -4,18 +4,11 @@ import { AiOutlineMinusCircle } from "react-icons/ai";
 import { useEffect, useState } from "react";
 import { PiImageThin } from "react-icons/pi";
 
-const serviceOptions = [
-    { label: 'Beauty & Fashion', value: 'Beauty & Fashion' },
-    { label: 'Health & Fitness', value: 'Health & Fitness' },
-    { label: 'Travel & Adventure', value: 'Travel & Adventure' },
-    { label: 'Food & Beverage', value: 'Food & Beverage' },
-    { label: 'Tech & Gadgets', value: 'Tech & Gadgets' },
-];
+
 
 type ClassData = {
     id: string;
     className: string;
-    serviceName: string;
     classImage: string;
     description: string;
     features: string[];
@@ -89,10 +82,6 @@ const CreateClassModal = ({
                     <div>
                         <Form.Item label="Class Name" name="className" rules={[{ required: true }]}>
                             <Input placeholder="Enter Class Name" style={{ height: 42 }} />
-                        </Form.Item>
-
-                        <Form.Item label="Service Name" name="serviceName" rules={[{ required: true }]}>
-                            <Select placeholder="Select Service Name" options={serviceOptions} style={{ height: 42 }} />
                         </Form.Item>
 
                         <div className="py-[4px] w-full">

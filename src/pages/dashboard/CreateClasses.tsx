@@ -8,7 +8,6 @@ import CreateClassModal from '../../components/modals/CreateClassModal';
 type ClassData = {
     id: string;
     className: string;
-    serviceName: string;
     classImage: string;
     description: string;
     features: string[];
@@ -22,7 +21,6 @@ const CreateClasses = () => {
         {
             id: '01',
             className: 'Beauty & Fashion Masterclass',
-            serviceName: 'Beauty & Fashion',
             classImage: '/car.svg',
             description: 'Learn the latest trends in beauty and fashion from industry professionals.',
             features: [
@@ -36,7 +34,6 @@ const CreateClasses = () => {
         {
             id: '02',
             className: 'Health & Fitness Bootcamp',
-            serviceName: 'Health & Fitness',
             classImage: '/car.svg',
             description: 'Transform your lifestyle with this all-in-one health and fitness program.',
             features: [
@@ -50,7 +47,6 @@ const CreateClasses = () => {
         {
             id: '03',
             className: 'Travel & Adventure Guide',
-            serviceName: 'Travel & Adventure',
             classImage: '/car.svg',
             description: 'Explore the world with practical travel advice and thrilling adventures.',
             features: [
@@ -64,7 +60,6 @@ const CreateClasses = () => {
         {
             id: '04',
             className: 'Food & Beverage Academy',
-            serviceName: 'Food & Beverage',
             classImage: '/car.svg',
             description: 'Cook, taste, and explore cuisines from around the world.',
             features: [
@@ -78,7 +73,6 @@ const CreateClasses = () => {
         {
             id: '05',
             className: 'Tech & Gadgets Workshop',
-            serviceName: 'Tech & Gadgets',
             classImage: '/car.svg',
             description: 'Stay ahead with the latest in tech trends and gadgets.',
             features: [
@@ -92,7 +86,6 @@ const CreateClasses = () => {
         {
             id: '06',
             className: 'Lifestyle & Vlogging 101',
-            serviceName: 'Lifestyle & Vlogging',
             classImage: '/car.svg',
             description: 'Build your personal brand through lifestyle vlogging.',
             features: [
@@ -106,7 +99,6 @@ const CreateClasses = () => {
         {
             id: '07',
             className: 'Parenting & Family Life Course',
-            serviceName: 'Parenting & Family',
             classImage: '/car.svg',
             description: 'Practical advice for raising children and nurturing family relationships.',
             features: [
@@ -120,7 +112,6 @@ const CreateClasses = () => {
         {
             id: '08',
             className: 'Entertainment & Gaming Zone',
-            serviceName: 'Entertainment & Gaming',
             classImage: '/car.svg',
             description: 'Dive into the world of entertainment content creation and gaming.',
             features: [
@@ -134,7 +125,6 @@ const CreateClasses = () => {
         {
             id: '09',
             className: 'Business & Finance Blueprint',
-            serviceName: 'Business & Finance',
             classImage: '/car.svg',
             description: 'Master your finances and build successful business strategies.',
             features: [
@@ -148,7 +138,6 @@ const CreateClasses = () => {
         {
             id: '10',
             className: 'Business & Finance Blueprint',
-            serviceName: 'Business & Finance',
             classImage: '/car.svg',
             description: 'Master your finances and build successful business strategies.',
             features: [
@@ -167,11 +156,6 @@ const CreateClasses = () => {
             dataIndex: 'id',
             key: 'id',
             width: "100px"
-        },
-        {
-            title: 'Service Name',
-            dataIndex: 'serviceName',
-            key: 'serviceName',
         },
         {
             title: 'Class Name',
