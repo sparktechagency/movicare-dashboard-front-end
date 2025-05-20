@@ -76,7 +76,8 @@ const CreateClassModal = ({
                 setImageUrl(undefined);
             }}
             footer={null}
-            width="800px"
+            width="800px" 
+            centered
         >
             <Form
                 form={form}

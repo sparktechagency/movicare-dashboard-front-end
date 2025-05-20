@@ -1,30 +1,55 @@
-import { ConfigProvider, Layout, Menu } from 'antd';
-import { sidebarItemsGenerator } from '../../utils/generateSidebarItems';
+import { ConfigProvider, Layout, Menu, MenuProps } from 'antd';
+import { TSidebarItem } from '../../utils/generateSidebarItems';
 import sidebarItems from '../../utils/sidebarItems';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { useState } from 'react';
+const { Sider } = Layout; 
 
-const { Sider } = Layout;
 const Sidebar = () => {
+    const location = useLocation();
+    const [openKeys, setOpenKeys] = useState<string[]>([]);
+
+    const handleOpenChange = (keys: string[]) => {
+        setOpenKeys(keys);
+    }; 
+
+        const sidebarItemsGenerator = (items: TSidebarItem[]): MenuProps['items'] => {
+        return items.map((item) => {
+            if (item.children) {
+                return {
+                    key: item.key,
+                    icon: item.icon,
+                    label: item.label,
+                    children: item.children.map((child) => ({
+                        key: `/${child.path}`, 
+                        icon: child.icon,
+                        label: <Link to={`/${child.path}`}>{child.label}</Link>,
+                    })),
+                };
+            }
+
+            return {
+                key: `/${item.path}`,
+                icon: item.icon,
+                label: <Link to={`/${item.path}`}>{item.label}</Link>,
+            };
+        });
+    }; 
+
     return (
         <ConfigProvider
             theme={{
                 token: {
-                    // colorPrimary: '#286a25',
-                    // colorBgContainer: '#286a25',
                     colorText: '#414446',
                 },
                 components: {
                     Menu: {
-                        // itemBg: '#286a25',
                         itemActiveBg: '#286a25',
                         itemSelectedColor: '#fff',
                         itemBorderRadius: '10px 10px 10px 10px' as any,
                         itemHeight: 45,
-
+                        itemMarginBlock: 12,
                         itemSelectedBg: '#286a25',
-                        // colorItemBgActive: '#286a25',
-                        // colorPrimaryActive: '#286a25',
-                        // colorBgBase: '#286a25',
                     },
                 },
             }}
@@ -34,13 +59,6 @@ const Sidebar = () => {
                 theme="light"
                 breakpoint="lg"
                 collapsedWidth="0"
-
-                // onBreakpoint={(broken) => {
-                //   // console.log(broken);
-                // }}
-                // onCollapse={(collapsed, type) => {
-                //   console.log(collapsed, type);
-                // }}
             >
                 {/* logo of the website */}
                 <Link to="/">
@@ -48,7 +66,7 @@ const Sidebar = () => {
                         style={{
                             margin: '0 20px',
                             padding: '20px 0',
-                        }} 
+                        }}
                         className=' flex items-center justify-center'
                     >
                         <img src="/logo.png" alt="" className=' w-[100px] h-[100px] ' />
@@ -56,15 +74,11 @@ const Sidebar = () => {
                 </Link>
 
                 <Menu
-                    style={
-                        {
-                            // color: '#286a25',
-                            // width: 250,
-                        }
-                    }
                     theme="light"
                     mode="inline"
-                    defaultSelectedKeys={['analytics']}
+                    selectedKeys={[location.pathname]}
+                    openKeys={openKeys}
+                    onOpenChange={handleOpenChange}
                     items={sidebarItemsGenerator(sidebarItems)}
                 />
             </Sider>

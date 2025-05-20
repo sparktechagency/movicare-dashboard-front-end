@@ -249,7 +249,7 @@ const Services = () => {
             title: "Image",
             dataIndex: "image",
             key: "image",
-            render: (text) => <img src={text} alt="Service" style={{  height: 40, borderRadius: 8, objectFit: "cover" }} />,
+            render: (text) => <img src={text} alt="Service" style={{  height: 45, borderRadius: 8, objectFit: "cover" }} />,
         },
         {
             title: "Name",
@@ -343,8 +343,6 @@ const Services = () => {
                 <Table
                     columns={serviceColumns}
                     dataSource={serviceData}
-                    rowKey={(record) => record.name}
-                    scroll={{ x: true }}  
                     pagination={{ pageSize: 8}}
                 />
             </div> 

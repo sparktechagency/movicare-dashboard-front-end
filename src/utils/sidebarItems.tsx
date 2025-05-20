@@ -5,6 +5,8 @@ import { IoBarChartOutline } from 'react-icons/io5';
 import { TbLogout, TbMessage2Check } from 'react-icons/tb';
 import { HiOutlineUserGroup } from 'react-icons/hi2';
 import { CiViewList } from 'react-icons/ci'; 
+import { PiBuildingOffice } from 'react-icons/pi';
+import { BsExclamationOctagon } from 'react-icons/bs';
 
 const sidebarItems: TSidebarItem[] = [
     {
@@ -42,6 +44,18 @@ const sidebarItems: TSidebarItem[] = [
         label: 'Reviews',
         path: 'reviews',
         icon: <AiOutlineStar size={24} />,
+    },
+    {
+        key: 'companies',
+        label: 'Companies',
+        path: 'companies',
+        icon: <PiBuildingOffice size={24} />,
+    },
+    {
+        key: 'why-choose',
+        label: 'Why Choose',
+        path: 'why-choose',
+        icon: <BsExclamationOctagon size={24} />,
     },
     {
         key: 'transactions',

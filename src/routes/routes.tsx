@@ -18,6 +18,8 @@ import CreateClasses from '../pages/dashboard/CreateClasses';
 import Services from '../pages/dashboard/Services';
 import BookingHistory from '../pages/dashboard/BookingHistory';
 import Transactions from '../pages/dashboard/Transactions';
+import Companies from '../pages/dashboard/Companies';
+import WhyChoose from '../pages/dashboard/WhyChoose';
 
 const router = createBrowserRouter([
     {
@@ -30,7 +32,9 @@ const router = createBrowserRouter([
             { path: 'booking-history', element: <BookingHistory /> },
             { path: 'services', element: <Services /> },
             { path: 'create-class', element: <CreateClasses /> },
-            { path: 'reviews', element: <Review /> },
+            { path: 'reviews', element: <Review /> }, 
+            { path: 'companies', element: <Companies /> },
+            { path: 'why-choose', element: <WhyChoose /> },
             { path: 'transactions', element: <Transactions /> },
             { path: 'make-admin', element: <MakeAdmin /> },
             { path: 'terms', element: <TermsCondition /> },

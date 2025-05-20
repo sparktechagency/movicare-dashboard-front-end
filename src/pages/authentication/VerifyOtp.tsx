@@ -25,7 +25,13 @@ const VerifyOtp = () => {
                 },
             }}
         >
-            <div className="flex bg-[#1A4F73] items-center justify-center h-screen">
+            <div className="flex  items-center justify-center h-screen" style={{
+            backgroundImage: `url('/auth.png')`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'top',
+            backgroundRepeat: 'no-repeat',
+            objectFit: 'cover',
+        }}>
                 <div className="bg-white w-[630px] rounded-lg shadow-lg p-10 ">
                     <div className="text-primaryText space-y-3 text-center">
                         <h1 className="text-3xl  font-medium text-center mt-2">Check your email</h1>
