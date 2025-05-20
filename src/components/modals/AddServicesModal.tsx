@@ -61,7 +61,7 @@ const AddServicesModal = ({
 
     return (
         <Modal
-            title={<p className="text-xl text-primary font-semibold">{editData?.id ? "Edit Class" : "Create Class"}</p>}
+            title={<p className="text-xl text-primary font-semibold">{editData?.id ? "Edit Service" : "Create Service"}</p>}
             open={isOpen}
             onCancel={() => {
                 setIsOpen(false);
@@ -88,7 +88,7 @@ const AddServicesModal = ({
 
 
                         <div className="mb-4 w-full">
-                            <p className="text-[14px] font-semibold py-1">Class Image</p>
+                            <p className="text-[14px] font-semibold py-1">Service Image</p>
                             <label htmlFor="image" className="p-1 border border-[#BABABA] rounded-lg bg-white cursor-pointer block">
                                 <div className="flex justify-center items-center w-full h-[210px] ">
                                     {imageUrl ? (

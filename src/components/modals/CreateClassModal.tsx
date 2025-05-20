@@ -1,4 +1,4 @@
-import { Button, Form, Input, InputNumber, Modal, Select, Space } from "antd";
+import { Button, Form, Input, InputNumber, Modal, Space } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { AiOutlineMinusCircle } from "react-icons/ai";
 import { useEffect, useState } from "react";
