@@ -3,8 +3,8 @@ import { useState } from 'react';
 import { IoTrashOutline } from 'react-icons/io5';
 
 import { AiOutlineEdit } from 'react-icons/ai';
-import CreateClassModal from '../../components/ui/form/CreateClassModal';
-import CreateWhyChooseModal from '../../components/ui/form/CreateWhyChooseModal';
+import CreateClassModal from '../../components/modals/CreateClassModal';
+import CreateWhyChooseModal from '../../components/modals/CreateWhyChooseModal';
 
 type contentType = {
   id: string;

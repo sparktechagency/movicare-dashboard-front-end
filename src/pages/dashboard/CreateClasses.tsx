@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { IoTrashOutline } from 'react-icons/io5';
 
 import { AiOutlineEdit } from 'react-icons/ai';
-import CreateClassModal from '../../components/ui/form/CreateClassModal';
+import CreateClassModal from '../../components/modals/CreateClassModal';
 
 type ClassData = {
     id: string;

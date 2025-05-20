@@ -1,7 +1,7 @@
 import { Button, Table } from 'antd';
 import { useState } from 'react';
 import { AiOutlineDelete } from 'react-icons/ai';
-import AddCompaniesModal from '../../components/ui/form/AddCompaniesModal';
+import AddCompaniesModal from '../../components/modals/AddCompaniesModal';
 
 // Sample data
 const data = [

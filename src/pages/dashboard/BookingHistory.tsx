@@ -4,13 +4,13 @@ import type { ColumnsType } from "antd/es/table";
 import { SearchOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import CustomModal from '../../components/shared/CustomModal';
-import InfluencerDetails from '../../components/ui/InfluencerDetails';
-
 import { ImInfo } from 'react-icons/im';
+import BookingDetailsModal from '../../components/modals/BookingDetailsModal';
+
 const { Option } = Select; 
 
 type BookingHistory = {
-  serial: number;
+  key: number;
   date: string; 
   pickupCity: string;
   dropOffCity: string;
@@ -26,7 +26,7 @@ type BookingHistory = {
 
 const bookingsData:BookingHistory[] = [
   {
-    serial: 1,
+    key: 1,
     date: "2025-05-18",
     pickupCity: "New York",
     dropOffCity: "Boston",
@@ -40,7 +40,7 @@ const bookingsData:BookingHistory[] = [
     status: "Completed",
   },
   {
-    serial: 2,
+    key: 2,
     date: "2025-05-17",
     pickupCity: "Los Angeles",
     dropOffCity: "San Diego",
@@ -54,7 +54,7 @@ const bookingsData:BookingHistory[] = [
     status: "Pending",
   },
   {
-    serial: 3,
+    key: 3,
     date: "2025-05-16",
     pickupCity: "Chicago",
     dropOffCity: "Milwaukee",
@@ -68,7 +68,7 @@ const bookingsData:BookingHistory[] = [
     status: "Canceled",
   },
   {
-    serial: 4,
+    key: 4,
     date: "2025-05-15",
     pickupCity: "Miami",
     dropOffCity: "Orlando",
@@ -82,7 +82,7 @@ const bookingsData:BookingHistory[] = [
     status: "Completed",
   },
   {
-    serial: 5,
+    key: 5,
     date: "2025-05-14",
     pickupCity: "Houston",
     dropOffCity: "Austin",
@@ -96,7 +96,7 @@ const bookingsData:BookingHistory[] = [
     status: "Pending",
   },
   {
-    serial: 6,
+    key: 6,
     date: "2025-05-13",
     pickupCity: "Seattle",
     dropOffCity: "Portland",
@@ -110,7 +110,7 @@ const bookingsData:BookingHistory[] = [
     status: "Canceled",
   },
   {
-    serial: 7,
+    key: 7,
     date: "2025-05-12",
     pickupCity: "Dallas",
     dropOffCity: "Fort Worth",
@@ -124,7 +124,7 @@ const bookingsData:BookingHistory[] = [
     status: "Completed",
   },
   {
-    serial: 8,
+    key: 8,
     date: "2025-05-11",
     pickupCity: "Denver",
     dropOffCity: "Colorado Springs",
@@ -138,7 +138,7 @@ const bookingsData:BookingHistory[] = [
     status: "Pending",
   },
   {
-    serial: 9,
+    key: 9,
     date: "2025-05-10",
     pickupCity: "Phoenix",
     dropOffCity: "Tucson",
@@ -152,7 +152,7 @@ const bookingsData:BookingHistory[] = [
     status: "Completed",
   },
   {
-    serial: 10,
+    key: 10,
     date: "2025-05-09",
     pickupCity: "San Francisco",
     dropOffCity: "Sacramento",
@@ -176,8 +176,8 @@ const statusOptions = ["Completed", "Pending", "Canceled"];
 const columns: ColumnsType<any> = [
   {
     title: "S/N",
-    dataIndex: "serial",
-    key: "serial",
+    dataIndex: "key",
+    key: "key",
   },
   {
     title: "Date",
@@ -271,7 +271,7 @@ const columns: ColumnsType<any> = [
             <CustomModal
                 open={showBookingDetails}
                 setOpen={setShowBookingDetails}
-                body={<InfluencerDetails showDetails={showDetails} />}
+                body={<BookingDetailsModal showDetails={showDetails} />}
                 key={'influencer-details'}
                 width={550}
             />

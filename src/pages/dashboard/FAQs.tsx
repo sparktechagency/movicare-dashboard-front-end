@@ -1,15 +1,32 @@
 import { Button, Flex } from 'antd';
 import { useState } from 'react';
-
 import CustomModal from '../../components/shared/CustomModal';
-import AddFaqForm from '../../components/ui/form/AddFaqForm';
-import EditFaqForm from '../../components/ui/form/EditFaqForm';
-import { faqData } from '../../const';
+import AddFaqForm from '../../components/modals/AddFaqForm';
+import EditFaqForm from '../../components/modals/EditFaqForm';
 
 import { GoQuestion } from 'react-icons/go';
 import { CiEdit } from 'react-icons/ci';
 import { RxCross2 } from 'react-icons/rx';
 import { AiOutlinePlus } from 'react-icons/ai';
+
+const faqData = [
+    {
+        question: 'What is the recommended age for using your baby products?',
+        answer: 'Our baby products are designed for newborns up to 3 years old. However, each product comes with specific guidelines for the recommended age range.',
+    },
+    {
+        question: 'Are your products safe for sensitive skin?',
+        answer: 'Yes, our products are dermatologically tested and safe for babies with sensitive skin. We use hypoallergenic and non-toxic ingredients.',
+    },
+    {
+        question: 'How can I track my order?',
+        answer: 'Once your order is shipped, we will send you a tracking number via email. You can use this number to track your package on our website or through the carrier’s site.',
+    },
+    {
+        question: 'What is your return policy?',
+        answer: 'We offer a 30-day return policy on all products. Items must be unused and in their original packaging. Please contact our support team to initiate a return.',
+    },
+]; 
 
 const FAQs = () => {
     const [openModal, setOpenModal] = useState(false);
@@ -25,10 +42,7 @@ const FAQs = () => {
         console.log(`Edit FAQ at index: ${index}`);
     };
 
-    // const handleDelete = (index: number) => {
-    //     // Logic for deleting the FAQ
-    //     console.log(`Delete FAQ at index: ${index}`);
-    // };
+
     return (
         <div className=' pt-5 px-3'>
             <Flex vertical={false} gap={10} align="center" justify="space-between">

@@ -1,13 +1,10 @@
 import { Table, Input, Button } from 'antd';
 import {  BsTrash } from 'react-icons/bs';
-import { useState } from 'react';
-import CustomModal from '../../components/shared/CustomModal';
-import BrandDetails from '../../components/ui/BrandDetails';
 import { FiSearch } from 'react-icons/fi';
 // Sample data
 
 const Users = () => {
-    const [showBrand, setShowBrand] = useState(false);
+
 
 const data = [
   {
@@ -116,7 +113,7 @@ const handleDelete = (record: any) => {
             </div>
             <Table columns={columns} dataSource={data} rowClassName="hover:bg-gray-100" />
 
-            <CustomModal open={showBrand} setOpen={setShowBrand} body={<BrandDetails />} key={'brand'} width={900} />
+           
         </div>
     );
 };

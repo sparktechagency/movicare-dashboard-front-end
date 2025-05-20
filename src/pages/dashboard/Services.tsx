@@ -3,7 +3,7 @@ import Table, { ColumnsType } from "antd/es/table";
 import { useState } from "react";
 import { AiOutlineEdit } from "react-icons/ai";
 import { IoTrashOutline } from "react-icons/io5";
-import AddServicesModal from "../../components/ui/form/AddServicesModal";
+import AddServicesModal from "../../components/modals/AddServicesModal";
 
 
 type Service = {

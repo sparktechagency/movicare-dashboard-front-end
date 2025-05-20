@@ -1,6 +1,6 @@
 
 type BookingHistory = {
-  serial: number;
+  key: number;
   date: string; 
   pickupCity: string;
   dropOffCity: string;
@@ -14,7 +14,7 @@ type BookingHistory = {
   status: 'Completed' | 'Canceled' | 'Active' | string; 
 }; 
 
-const InfluencerDetails = ({showDetails}:{showDetails:BookingHistory|null}) => {
+const BookingDetailsModal = ({showDetails}:{showDetails:BookingHistory|null}) => {
     return (
         <div className=" p-6 rounded-lg  mx-auto">
             {/* Header with Logo */}
@@ -73,4 +73,4 @@ const InfluencerDetails = ({showDetails}:{showDetails:BookingHistory|null}) => {
     );
 };
 
-export default InfluencerDetails;
+export default BookingDetailsModal;

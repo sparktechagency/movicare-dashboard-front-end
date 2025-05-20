@@ -1,7 +1,7 @@
 import { Table } from 'antd';
 import { AiOutlineDelete, AiOutlineEye } from 'react-icons/ai';
 import CustomModal from '../../components/shared/CustomModal';
-import ReviewForm from '../../components/ui/form/ReviewForm';
+import ReviewForm from '../../components/modals/ReviewForm';
 import { useState } from 'react';
 
 // Sample data
