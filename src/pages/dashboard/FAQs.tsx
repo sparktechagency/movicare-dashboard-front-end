@@ -7,7 +7,8 @@ import EditFaqForm from '../../components/modals/EditFaqForm';
 import { GoQuestion } from 'react-icons/go';
 import { CiEdit } from 'react-icons/ci';
 import { RxCross2 } from 'react-icons/rx';
-import { AiOutlinePlus } from 'react-icons/ai';
+import { AiOutlinePlus } from 'react-icons/ai'; 
+// fsdfdsfs
 
 const faqData = [
     {
