@@ -1,55 +1,150 @@
-import { Form, Input, Button } from 'antd';
-import { AiOutlinePlus } from 'react-icons/ai';
+import { Form, Input, Modal } from "antd";
+import { useEffect } from "react";
+import Swal from "sweetalert2";
+import { useAddFaqMutation, useUpdateFaqMutation } from "../../redux/apiSlices/faqSlice";
 
-const { TextArea } = Input;
 
-const AddFaqForm = ({ onFinish }: { onFinish: (values: any) => void }) => {
-    const [form] = Form.useForm();
+
+const AddFaqForm = ({ setModalData, modalData, openAddModel, setOpenAddModel, refetch }: { setModalData: any, modalData: any, openAddModel: any, setOpenAddModel: any, refetch: any }) => {
+    const [form] = Form.useForm()
+    const [addFaq] = useAddFaqMutation()
+    const [updateFaq] = useUpdateFaqMutation()
+
+    useEffect(() => {
+        if (modalData) {
+            form.setFieldsValue({ title: modalData?.question, description: modalData?.answer })
+        }
+    }, [modalData])
+
+    const onFinish = async (values: { title: string, description: string }) => {
+        const data = {
+            id: modalData?.id,
+          ...values
+        }
+
+
+        if (modalData?.id) {
+            await updateFaq(data).then((res) => { 
+                  console.log(res);
+                if (res?.data?.success) {
+                    Swal.fire({
+                        text: res?.data?.message,
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    }).then(() => {
+                        refetch();
+                        setModalData(null)
+                        form.resetFields()
+                        setOpenAddModel(false);
+                    })
+                } else {
+                    Swal.fire({
+                        title: "Oops",
+                        //@ts-ignore
+                        text: res?.error?.data?.message,
+                        icon: "error",
+                        timer: 1500,
+                        showConfirmButton: false,
+                    });
+
+                }
+            })
+        } else {
+            await addFaq(values).then((res) => { 
+              
+                if (res?.data?.success) {
+                    Swal.fire({
+                        text: res?.data?.message,
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    }).then(() => {
+                        refetch();
+                        setOpenAddModel(false);
+                        setModalData(null)
+                        form.resetFields()
+                    })
+                } else {
+                    Swal.fire({
+                        title: "Oops",
+                        //@ts-ignore
+                        text: res?.error?.data?.message,
+                        icon: "error",
+                        timer: 1500,
+                        showConfirmButton: false,
+                    });
+
+                }
+            })
+        }
+    }
 
     return (
-        <Form form={form} layout="vertical" onFinish={onFinish}>
-            {/* Product Name */}
-            <Form.Item
-                label="Question"
-                name="productName"
-                rules={[{ required: true, message: 'Please enter a question' }]}
-            >
-                <Input
-                    style={{
-                        height: 48,
-                    }}
-                    placeholder="Your faq question"
-                />
-            </Form.Item>
-
-            {/* Description */}
-            <Form.Item label="Answer" name="answer" rules={[{ required: true, message: 'Please enter a answer' }]}>
-                <TextArea
-                    style={{
-                        width: '100%',
-                        resize: 'none',
-                        borderRadius: 6,
-                        backgroundColor: '#F9F9F9',
-                    }}
-                    rows={3}
-                    placeholder="Your faq answer"
-                />
-            </Form.Item>
-
-            {/* Submit Button */}
-            <Form.Item className="flex justify-center">
-                <Button
-                    icon={<AiOutlinePlus />}
-                    htmlType="submit"
-                    style={{
-                        height: 40,
-                    }}
-                    type="primary"
+        <Modal
+            centered
+            open={openAddModel}
+            onCancel={() => {
+                setOpenAddModel(false)
+                setModalData(null)
+                form.resetFields()
+            }}
+            width={500}
+            footer={false}
+        >
+            <div className="">
+                <h1
+                    className=" text-[20px] font-medium"
+                    style={{ marginBottom: "12px" }}
                 >
-                    Add FAQ
-                </Button>
-            </Form.Item>
-        </Form>
+                    {modalData ? "Update FAQ" : "Add FAQ"}
+                </h1>
+                <Form onFinish={onFinish} form={form} layout="vertical">
+                    <Form.Item name="title" style={{ marginBottom: "16px" }} label={<p style={{ display: "block" }}>
+                        Question
+                    </p>}>
+
+                        <Input
+                            type="Text"
+                            placeholder="Enter Question"
+                            style={{
+                                border: "1px solid #E0E4EC",
+                                padding: "10px",
+                                height: "52px",
+                                background: "white",
+                                borderRadius: "8px",
+                                outline: "none",
+                                width: "100%",
+                            }}
+
+                        />
+                    </Form.Item>
+                    <Form.Item name="description" style={{ marginBottom: "16px" }} label={<p style={{ display: "block" }}>
+                        Answer
+                    </p>}>
+
+                        <Input.TextArea
+                            placeholder="Enter answer"
+                            style={{
+                                border: "1px solid #E0E4EC",
+                                padding: "10px",
+                                height: "152px",
+                                background: "white",
+                                borderRadius: "8px",
+                                outline: "none",
+                                width: "100%",
+                                resize: "none",
+                            }}
+                        />
+                    </Form.Item>
+                    <Form.Item className=" text-end">
+                        <button type="submit" className="bg-primary text-white w-[120px] h-[42px] rounded-lg">
+                            Submit
+                        </button>
+                    </Form.Item>
+                </Form>
+            </div>
+        </Modal>
     );
 };
 

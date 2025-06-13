@@ -1,51 +1,69 @@
-import { Button, Flex } from 'antd';
 import { useState } from 'react';
-import CustomModal from '../../components/shared/CustomModal';
-import AddFaqForm from '../../components/modals/AddFaqForm';
-import EditFaqForm from '../../components/modals/EditFaqForm';
-
 import { GoQuestion } from 'react-icons/go';
 import { CiEdit } from 'react-icons/ci';
 import { RxCross2 } from 'react-icons/rx';
-import { AiOutlinePlus } from 'react-icons/ai'; 
-// fsdfdsfs
+import Swal from 'sweetalert2';
+import { Button, ConfigProvider, Flex, Pagination } from 'antd';
+import { AiOutlinePlus } from 'react-icons/ai';
+import { useDeleteFaqMutation, useGetFaqQuery } from '../../redux/apiSlices/faqSlice';
+import AddFaqForm from '../../components/modals/AddFaqForm';
 
-const faqData = [
-    {
-        question: 'What is the recommended age for using your baby products?',
-        answer: 'Our baby products are designed for newborns up to 3 years old. However, each product comes with specific guidelines for the recommended age range.',
-    },
-    {
-        question: 'Are your products safe for sensitive skin?',
-        answer: 'Yes, our products are dermatologically tested and safe for babies with sensitive skin. We use hypoallergenic and non-toxic ingredients.',
-    },
-    {
-        question: 'How can I track my order?',
-        answer: 'Once your order is shipped, we will send you a tracking number via email. You can use this number to track your package on our website or through the carrier’s site.',
-    },
-    {
-        question: 'What is your return policy?',
-        answer: 'We offer a 30-day return policy on all products. Items must be unused and in their original packaging. Please contact our support team to initiate a return.',
-    },
-]; 
 
-const FAQs = () => {
-    const [openModal, setOpenModal] = useState(false);
-    const [openEditModal, setEditModal] = useState(false);
+const FAQ = () => {
+    const [openAddModel, setOpenAddModel] = useState(false);
+    const [modalData, setModalData] = useState<{ id: string; answer: string; question: string } | null>(null);
+    const { data: faqs, refetch } = useGetFaqQuery(undefined)
+    const [deleteFaq] = useDeleteFaqMutation()
 
-    const handleAddFaq = (values: any) => {
-        console.log('Form Submitted', values);
-        setOpenModal(false);
+
+    const faqInfo = faqs?.data?.map((value: { _id: string; description: string; title: string; }) => ({
+        id: value?._id,
+        answer: value?.description,
+        question: value?.title
+
+    }))
+
+    const handleDelete = async (id: string) => {
+        Swal.fire({
+            title: "Are you sure?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                await deleteFaq(id).then((res) => {
+                    if (res?.data?.success) {
+                        Swal.fire({
+                            text: res?.data?.message,
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500,
+                        }).then(() => {
+                            refetch();
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "Oops",
+                            //@ts-ignore
+                            text: res?.error?.data?.message,
+                            icon: "error",
+                            timer: 1500,
+                            showConfirmButton: false,
+                        });
+                    }
+
+                })
+            }
+        });
     };
 
-    const handleEdit = (index: number) => {
-        // Logic for editing the FAQ
-        console.log(`Edit FAQ at index: ${index}`);
-    };
 
 
     return (
-        <div className=' pt-5 px-3'>
+        <div className="">
             <Flex vertical={false} gap={10} align="center" justify="space-between">
                 <div>
                     <h1 className="text-2xl text-primary font-semibold">FAQs</h1>
@@ -58,7 +76,7 @@ const FAQs = () => {
                 >
                     <Button
                         icon={<AiOutlinePlus />}
-                        onClick={() => setOpenModal(true)}
+                        onClick={() => setOpenAddModel(true)}
                         htmlType="submit"
                         style={{
                             height: 40,
@@ -70,56 +88,64 @@ const FAQs = () => {
                 </div>
             </Flex>
 
-            <div className="space-y-6 my-5">
-                <div className="bg-white py-6 px-4 rounded-md">
-                    {faqData.map((item, index) => (
-                        <div key={index} className="flex justify-between items-start gap-4 ">
-                            <div className="mt-3">
-                                <GoQuestion color="#286a25" size={25} />
-                            </div>
-                            <div className="w-full ">
-                                <p className="text-base font-medium border-b rounded-xl py-2 px-4 flex items-center gap-8 bg-slate-50">
-                                    <span className=" flex-1 "> {item?.question}</span>
-                                </p>
-                                <div className="flex justify-start items-start gap-2 border-b  py-2 px-4  rounded-xl my-4 bg-slate-50">
-                                    <p className="text-[#919191] leading-[24px] mb-6 ">{item?.answer}</p>
-                                </div>
-                            </div>
-                            <div className="w-[5%] flex justify-start flex-col items-start gap-2">
-                                <CiEdit
-                                    size={24}
-                                    onClick={() => {
-                                        setEditModal(true);
-                                    }}
-                                    className="text-2xl cursor-pointer text-[#286a25]"
-                                />
-                                <RxCross2
-                                    size={24}
-                                    onClick={() => { }}
-                                    className="text-2xl cursor-pointer text-red-600"
-                                />
+            <div className="mt-5 pb-6 px-4 rounded-md">
+                {faqInfo?.map((item: { id: string, answer: string, question: string }, index: number) => (
+                    <div key={index} className="flex justify-between items-start gap-4 py-4 px-4 rounded-lg bg-white mb-3">
+                        <GoQuestion color="#286a25" size={25} className="mt-3" />
+                        <div className="flex-1">
+                            <p className="text-base font-medium rounded-xl py-2 px-4 flex items-center gap-8">
+                                <span className="flex-1">{item?.question}</span>
+                            </p>
+                            <div className=" rounded-xl py-2 px-4 mt-4">
+                                <p className="text-[#919191] leading-6">{item?.answer}</p>
                             </div>
                         </div>
-                    ))}
-                </div>
+                        <div className="flex items-center gap-2 pt-4">
+                            <CiEdit
+                                onClick={() => {
+                                    setOpenAddModel(true);
+                                    setModalData(item);
+                                }}
+                                className="text-2xl cursor-pointer text-[#286a25]"
+                            />
+                            <RxCross2
+                                onClick={() => handleDelete(item?.id)}
+                                className="text-2xl cursor-pointer text-red-600"
+                            />
+                        </div>
+                    </div>
+                ))}
             </div>
 
-            <CustomModal
-                open={openModal}
-                setOpen={setOpenModal}
-                title={<p className='font-semibold text-xl  text-primary'>Add FAQ </p>}
-                width={500}
-                body={<AddFaqForm onFinish={handleAddFaq} />}
+            <AddFaqForm
+                setOpenAddModel={setOpenAddModel}
+                openAddModel={openAddModel}
+                modalData={modalData}
+                setModalData={setModalData}
+                refetch={refetch}
+
             />
-            <CustomModal
-                open={openEditModal}
-                setOpen={setEditModal}
-                title={<p className='font-semibold text-xl  text-primary'>Edit FAQ </p>}
-                width={500}
-                body={<EditFaqForm onFinish={handleEdit} />}
-            />
+
+            <div>
+                <ConfigProvider
+                    theme={{
+                        components: {
+                            Pagination: {
+                                itemActiveBg: "#00809E"
+                            },
+                        },
+                        token: {
+                            borderRadius: 100,
+                            colorText: "#fffff"
+
+                        },
+                    }}
+                >
+
+                </ConfigProvider>
+            </div>
         </div>
     );
 };
 
-export default FAQs;
+export default FAQ;

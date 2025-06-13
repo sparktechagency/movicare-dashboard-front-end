@@ -1,9 +1,14 @@
 import { Layout } from 'antd';
 import { Link } from 'react-router-dom';
+import { UserContext } from '../../provider/User';
+import { useContext } from 'react';
+import { imageUrl } from '../../redux/api/baseApi';
 
 const { Header } = Layout;
 
-const HeaderDashboard = () => {
+const HeaderDashboard = () => { 
+    const user = useContext(UserContext); 
+    console.log(user);
     return (
         <Header
             style={{
@@ -65,7 +70,7 @@ const HeaderDashboard = () => {
                         }}
                     >
                         <img
-                            src={'/user.svg'}
+                            src={user?.image?.startsWith("http") ? user?.image : `${imageUrl}${user?.image}`}
                             style={{
                                 width: '44px',
                                 height: '44px',
@@ -82,7 +87,7 @@ const HeaderDashboard = () => {
                                 fontWeight: '600',
                             }}
                         >
-                            Anonymous
+                            {user?.name}
                         </h2>
                     </Link>
                 </div>
