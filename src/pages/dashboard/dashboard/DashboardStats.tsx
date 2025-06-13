@@ -2,25 +2,25 @@
 import { HiCurrencyDollar, HiMiniUserGroup } from 'react-icons/hi2';
 import { IoBookmarks } from 'react-icons/io5';
 
-const DashboardStats = () => {
+const DashboardStats = ({summary}:any) => {
     const data = [
         {
             name: 'Total User',
-            count: '20.10K',
+            count: summary?.users >= 1000 ? `${(summary?.users / 1000).toFixed(1)}k` : summary?.users,
             icon: <HiMiniUserGroup color="#286a25" size={35} />,
             bgColor: '#fff',
             textColor: '#286a25',
         },
         {
             name: 'Total Earning',
-            count: '920',
+            count: summary?.totalEarnings >= 1000 ? `${(summary?.totalEarnings / 1000).toFixed(1)}k` : summary?.totalEarnings,
             icon: <HiCurrencyDollar color="#286a25" size={36} />,
             textColor: '#3F0D47',
             bgColor: '#fff',
         },
         {
             name: 'Total Booking',
-            count: '150.10K',
+            count: summary?.booking >= 1000 ? `${(summary?.booking / 1000).toFixed(1)}k` : summary?.booking,
             icon: <IoBookmarks color="#286a25" size={30} />,
             textColor: '#DAA520',
             bgColor: '#fff',
@@ -41,10 +41,10 @@ const DashboardStats = () => {
                             </p>
                             <div>
                                 <p
-                                    style={{ color: item.textColor }} // Inline style for text color
+                                    style={{ color: item.textColor }}
                                     className="text-3xl font-bold"
                                 >
-                                    {item.count} +
+                                    {item.count} 
                                 </p>
                             </div>
                         </div>

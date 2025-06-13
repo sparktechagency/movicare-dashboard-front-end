@@ -1,22 +1,9 @@
 import { Select } from 'antd';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 const { Option } = Select;
-const data = [
-    { name: 'Jan', earnings: 8000 },
-    { name: 'Feb', earnings: 12000 },
-    { name: 'Mar', earnings: 10000 },
-    { name: 'Apr', earnings: 22314 },
-    { name: 'May', earnings: 16000 },
-    { name: 'Jun', earnings: 15000 },
-    { name: 'Jul', earnings: 11000 },
-    { name: 'Aug', earnings: 17000 },
-    { name: 'Sep', earnings: 9000 },
-    { name: 'Oct', earnings: 15000 },
-    { name: 'Nov', earnings: 14000 },
-    { name: 'Dec', earnings: 17000 },
-];
 
-const EarningChart = () => {
+const EarningChart = ({ earningData }: { earningData: any }) => {
+    const data = earningData?.map((item: any) => ({ name: item?.month, earnings: item?.totalEarnings }))
     return (
         <div
             style={{

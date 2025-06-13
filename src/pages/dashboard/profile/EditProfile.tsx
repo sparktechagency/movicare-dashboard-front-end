@@ -1,59 +1,107 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button, Form, Input } from 'antd';
-import { CiEdit } from 'react-icons/ci';
+import { UserContext } from '../../../provider/User';
+import { imageUrl } from '../../../redux/api/baseApi';
+import { errorType } from '../../authentication/Login';
+import { useUpdateProfileMutation } from '../../../redux/apiSlices/authSlice';
+import { AiOutlineEdit } from 'react-icons/ai';
+import Swal from 'sweetalert2';
 
-interface FormValues {
-    name: string;
-    email: string;
-    image: File | null;
-}
 
 const EditProfile: React.FC = () => {
-    const [imagePreview, setImagePreview] = useState<string>('/user.svg');
-    const [file, setFile] = useState<File | null>(null);
+    const user = useContext(UserContext);
+    const [profileForm] = Form.useForm();
+    const [imgURL, setImgURL] = useState("");
+    const [imgFile, setImageFile] = useState<File | null>(null);
+    const [updateProfile, { isLoading, isSuccess, isError, error, data }] = useUpdateProfileMutation();
+    console.log(user);
 
-    const onFinish = (values: FormValues) => {
-        console.log('Received values of form: ', values);
-        values.image = file;
-    };
+    useEffect(() => {
+        if (user) {
+            profileForm.setFieldsValue({
+                name: user?.name,
+                email: user?.email,
+            });
+            setImgURL(user?.image?.startsWith("http") ? user?.image : `${imageUrl}${user?.image}`)
+        }
+    }, [profileForm, user]);
 
-    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const selectedFile = event.target.files?.[0];
-        if (selectedFile) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                setImagePreview(reader.result as string);
-                setFile(selectedFile);
-            };
-            reader.readAsDataURL(selectedFile);
+    useEffect(() => {
+        if (isSuccess) {
+            if (data) {
+                Swal.fire({
+                    text: data?.message,
+                    icon: "success",
+                    timer: 1500,
+                    showConfirmButton: false
+                }).then(() => {
+                    window.location.reload();
+                })
+            }
+        }
+
+        if (isError) {
+            const errorMessage =
+                (error as errorType)?.data?.errorMessages
+                    ? (error as errorType)?.data?.errorMessages.map((msg: { message: string }) => msg?.message).join("\n")
+                    : (error as errorType)?.data?.message || "Something went wrong. Please try again.";
+            Swal.fire({            
+                text: errorMessage,
+                icon: "error",
+            });
+        }
+    }, [isSuccess, isError, error, data]);
+
+    const onChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+
+        if (file) {
+            const imgUrl = URL.createObjectURL(file);
+            setImgURL(imgUrl);
+            setImageFile(file)
         }
     };
 
+    const onProfileFinish = async (values: { name: string, email: string, contact: string }) => {
+        const formData = new FormData();
+
+        if (imgFile) {
+            formData.append("image", imgFile);
+        }
+        formData.append("name", values?.name);
+        formData.append("email", values?.email);
+        formData.append("contact", values?.contact);
+
+        await updateProfile(formData).unwrap()
+    }
+
+
+
     return (
         <div className="max-w-lg mx-auto">
-            <Form name="update_profile" layout="vertical" initialValues={{ remember: true }} onFinish={onFinish}>
+            <Form name="update_profile" layout="vertical" initialValues={{ remember: true }} onFinish={onProfileFinish} form={profileForm}>
                 {/* Banner Image */}
                 <div className="flex justify-center">
-                    <div className="w-[150px] h-[150px] relative">
-                        <img
-                            src={imagePreview}
-                            alt="User Profile"
-                            className="w-full h-full object-cover rounded-full"
-                        />
-                        <label
-                            className="absolute bottom-[10%] cursor-pointer right-[5%] bg-primary rounded-full p-1 text-white"
-                            htmlFor="imageUploadBanner"
-                        >
-                            <CiEdit size={25} />
-                        </label>
-
+                    <div className="flex  py-3"> 
+                        <div className='hidden'> 
                         <input
-                            id="imageUploadBanner"
+                            onChange={onChange}
                             type="file"
-                            onChange={handleImageChange}
-                            style={{ display: 'none' }}
-                            accept="image/*"
+                            id="img"
+                            className="hidden "
                         />
+                        </div>
+                        <label
+                            htmlFor="img"
+                            className="relative w-[120px] h-[120px] cursor-pointer rounded-full  bg-white bg-cover bg-center"
+                            style={{ backgroundImage: `url(${imgURL})` }}
+                        >
+                            <div
+                                className="absolute bottom-1 -right-1 w-10 h-10 rounded-full bg-white border border-gray-300 flex items-center justify-center"
+                            >
+                                <AiOutlineEdit size={20} className="text-primary" />
+                            </div>
+                        </label>
                     </div>
                 </div>
 
@@ -78,7 +126,7 @@ const EditProfile: React.FC = () => {
                     name="email"
                     rules={[{ required: true, message: 'Please input your email!' }]}
                 >
-                    <Input className="h-12" placeholder="Enter your email" />
+                    <Input className="h-12" placeholder="Enter your email" readOnly />
                 </Form.Item>
 
                 <Form.Item className="flex justify-center">
@@ -89,7 +137,7 @@ const EditProfile: React.FC = () => {
                         type="primary"
                         htmlType="submit"
                     >
-                        Update Profile
+                        {isLoading ? "Updating..." : "Update Profile"}
                     </Button>
                 </Form.Item>
             </Form>

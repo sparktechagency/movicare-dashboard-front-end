@@ -1,26 +1,8 @@
 import { Select } from 'antd';
 import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Legend, Bar } from 'recharts';
 const { Option } = Select;
-const UserChart = () => {
-    interface UserData {
-        month: string;
-        totalUsers: number;
-        newUsers: number; // Example for the secondary bar
-    }
-
-    const data: UserData[] = [
-        { month: 'February', totalUsers: 120, newUsers: 30 },
-        { month: 'March', totalUsers: 200, newUsers: 45 },
-        { month: 'April', totalUsers: 150, newUsers: 40 },
-        { month: 'May', totalUsers: 220, newUsers: 50 },
-        { month: 'June', totalUsers: 180, newUsers: 35 },
-        { month: 'July', totalUsers: 300, newUsers: 70 },
-        { month: 'August', totalUsers: 250, newUsers: 60 },
-        { month: 'September', totalUsers: 270, newUsers: 80 },
-        { month: 'October', totalUsers: 320, newUsers: 90 },
-        { month: 'November', totalUsers: 280, newUsers: 75 },
-        { month: 'December', totalUsers: 350, newUsers: 100 },
-    ];
+const UserChart = ({ userData }: { userData: any }) => {
+    const data = userData?.map((item: any) => ({ name: item?.month, totalUsers: item?.totalUsers }))
 
     return (
         <div
@@ -50,7 +32,7 @@ const UserChart = () => {
                     <Tooltip />
                     <Legend />
                     <Bar dataKey="totalUsers" fill="#286a25" />
-                    <Bar dataKey="newUsers" fill="#5C450D" />
+                    {/* <Bar dataKey="newUsers" fill="#5C450D" />  */}
                 </BarChart>
             </ResponsiveContainer>
         </div>
