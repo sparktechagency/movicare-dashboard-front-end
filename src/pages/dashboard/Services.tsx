@@ -4,6 +4,9 @@ import { useState } from "react";
 import { AiOutlineEdit } from "react-icons/ai";
 import { IoTrashOutline } from "react-icons/io5";
 import AddServicesModal from "../../components/modals/AddServicesModal";
+import { useDeleteServiceMutation, useGetAllServicesQuery } from "../../redux/apiSlices/servicesSlice";
+import { imageUrl } from "../../redux/api/baseApi";
+import Swal from "sweetalert2";
 
 
 type Service = {
@@ -21,249 +24,94 @@ type Service = {
     fixed_price?: number;
 };
 
-const serviceData: Service[] = [
-    {
-        id: 1,
-        name: "Luxury Spa Treatment",
-        description: "A premium spa experience with massages and facials.",
-        image: "/car.svg",
-        status: "active",
-        adults_price: 120,
-        kids_price: 60,
-        service_price: 150,
-        price_per_km: 2,
-        price_per_hour: 25,
-        taxs: 10,
-        fixed_price: 100,
-    },
-    {
-        id: 2,
-        name: "City Tour Guide",
-        description: "Guided city tours with historical insights.",
-        image: "/car.svg",
-        status: "active",
-        adults_price: 70,
-        kids_price: 30,
-        service_price: 0,
-        price_per_km: 0,
-        price_per_hour: 20,
-        taxs: 0,
-        fixed_price: 50,
-    },
-    {
-        id: 3,
-        name: "Fitness Bootcamp",
-        description: "Intense outdoor training for all fitness levels.",
-        image: "/car.svg",
-        status: "deleted",
-        adults_price: 80,
-        kids_price: 50,
-        service_price: 90,
-        price_per_km: 0,
-        price_per_hour: 0,
-        taxs: 5,
-        fixed_price: 0,
-    },
-    {
-        id: 4,
-        name: "Luxury Spa Treatment",
-        description: "A premium spa experience with massages and facials.",
-        image: "/car.svg",
-        status: "active",
-        adults_price: 120,
-        kids_price: 60,
-        service_price: 150,
-        price_per_km: 2,
-        price_per_hour: 25,
-        taxs: 10,
-        fixed_price: 100,
-    },
-    {
-        id: 5,
-        name: "City Tour Guide",
-        description: "Guided city tours with historical insights.",
-        image: "/car.svg",
-        status: "active",
-        adults_price: 70,
-        kids_price: 30,
-        service_price: 0,
-        price_per_km: 0,
-        price_per_hour: 20,
-        taxs: 0,
-        fixed_price: 50,
-    },
-    {
-        id: 6,
-        name: "Fitness Bootcamp",
-        description: "Intense outdoor training for all fitness levels.",
-        image: "/car.svg",
-        status: "deleted",
-        adults_price: 80,
-        kids_price: 50,
-        service_price: 90,
-        price_per_km: 0,
-        price_per_hour: 0,
-        taxs: 5,
-        fixed_price: 0,
-    },
-    {
-        id: 7,
-        name: "Luxury Spa Treatment",
-        description: "A premium spa experience with massages and facials.",
-        image: "/car.svg",
-        status: "active",
-        adults_price: 120,
-        kids_price: 60,
-        service_price: 150,
-        price_per_km: 2,
-        price_per_hour: 25,
-        taxs: 10,
-        fixed_price: 100,
-    },
-    {
-        id: 8,
-        name: "City Tour Guide",
-        description: "Guided city tours with historical insights.",
-        image: "/car.svg",
-        status: "active",
-        adults_price: 70,
-        kids_price: 30,
-        service_price: 0,
-        price_per_km: 0,
-        price_per_hour: 20,
-        taxs: 0,
-        fixed_price: 50,
-    },
-    {
-        id: 9,
-        name: "Fitness Bootcamp",
-        description: "Intense outdoor training for all fitness levels.",
-        image: "/car.svg",
-        status: "deleted",
-        adults_price: 80,
-        kids_price: 50,
-        service_price: 90,
-        price_per_km: 0,
-        price_per_hour: 0,
-        taxs: 5,
-        fixed_price: 0,
-    },
-    {
-        id: 10,
-        name: "Luxury Spa Treatment",
-        description: "A premium spa experience with massages and facials.",
-        image: "/car.svg",
-        status: "active",
-        adults_price: 120,
-        kids_price: 60,
-        service_price: 150,
-        price_per_km: 2,
-        price_per_hour: 25,
-        taxs: 10,
-        fixed_price: 100,
-    },
-    {
-        id: 11,
-        name: "City Tour Guide",
-        description: "Guided city tours with historical insights.",
-        image: "/car.svg",
-        status: "active",
-        adults_price: 70,
-        kids_price: 30,
-        service_price: 0,
-        price_per_km: 0,
-        price_per_hour: 20,
-        taxs: 0,
-        fixed_price: 50,
-    },
-    {
-        id: 12,
-        name: "Fitness Bootcamp",
-        description: "Intense outdoor training for all fitness levels.",
-        image: "/car.svg",
-        status: "deleted",
-        adults_price: 80,
-        kids_price: 50,
-        service_price: 90,
-        price_per_km: 0,
-        price_per_hour: 0,
-        taxs: 5,
-        fixed_price: 0,
-    },
-    {
-        id: 13,
-        name: "Luxury Spa Treatment",
-        description: "A premium spa experience with massages and facials.",
-        image: "/car.svg",
-        status: "active",
-        adults_price: 120,
-        kids_price: 60,
-        service_price: 150,
-        price_per_km: 2,
-        price_per_hour: 25,
-        taxs: 10,
-        fixed_price: 100,
-    },
-    {
-        id: 14,
-        name: "City Tour Guide",
-        description: "Guided city tours with historical insights.",
-        image: "/car.svg",
-        status: "active",
-        adults_price: 70,
-        kids_price: 30,
-        service_price: 0,
-        price_per_km: 0,
-        price_per_hour: 20,
-        taxs: 0,
-        fixed_price: 50,
-    },
-    {
-        id: 15,
-        name: "Fitness Bootcamp",
-        description: "Intense outdoor training for all fitness levels.",
-        image: "/car.svg",
-        status: "deleted",
-        adults_price: 80,
-        kids_price: 50,
-        service_price: 90,
-        price_per_km: 0,
-        price_per_hour: 0,
-        taxs: 5,
-        fixed_price: 0,
-    },
-];
-
 const Services = () => {
 
     const [isOpen, setIsOpen] = useState(false);
     const [editData, setEditData] = useState<Service | null>(null);
+    const { data: allServices, refetch } = useGetAllServicesQuery(undefined);
+    const [deleteService] = useDeleteServiceMutation(); 
+    console.log(allServices);
+
+    const serviceData = allServices?.data.map((service: any, index: number) => ({
+        key: index + 1,
+        id: service._id,
+        name: service.name,
+        description: service.description,
+        image: service?.image?.startsWith("http") ? service?.image : `${imageUrl}${service?.image}`,
+        adults_price: service.adults_price,
+        kids_price: service.kids_price,
+        service_price: service.service_price,
+        price_per_km: service.price_per_km,
+        price_per_hour: service.price_per_hour,
+        taxs: service.taxs, 
+        fixed_price: service.fixed_price , 
+        button_text :service.button_text
+    }));
+
+
+    const handleDelete = async (id: string) => {
+        Swal.fire({
+            title: "Are you sure?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                await deleteService(id).then((res) => {
+                    if (res?.data?.success) {
+                        Swal.fire({
+                            text: res?.data?.message,
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500,
+                        }).then(() => {
+                            refetch();
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "Oops",
+                            //@ts-ignore
+                            text: res?.error?.data?.message,
+                            icon: "error",
+                            timer: 1500,
+                            showConfirmButton: false,
+                        });
+                    }
+
+                })
+            }
+        });
+    };
+
 
     const serviceColumns: ColumnsType<Service> = [
         {
             title: "ID",
-            dataIndex: "id",
-            key: "id",
+            dataIndex: "key",
+            key: "key",
         },
         {
             title: "Image",
             dataIndex: "image",
             key: "image",
-            render: (text) => <img src={text} alt="Service" style={{  height: 45, borderRadius: 8, objectFit: "cover" }} />,
+            render: (text) => <img src={text} alt="Service" style={{ height: 45, borderRadius: 8, objectFit: "cover" }} />,
         },
         {
             title: "Name",
             dataIndex: "name",
             key: "name",
         },
-        {
-            title: "Description",
-            dataIndex: "description",
-            key: "description",
-            ellipsis: true,
-            width: "150px",
+        // {
+        //     title: "Description",
+        //     dataIndex: "description",
+        //     key: "description",
+        //     ellipsis: true,
+        //     width: "150px",
 
-        },
+        // },
         {
             title: "Adults Price ($)",
             dataIndex: "adults_price",
@@ -279,25 +127,20 @@ const Services = () => {
             dataIndex: "service_price",
             key: "service_price",
         },
-        //   {
-        //     title: "Price/km ($)",
-        //     dataIndex: "price_per_km",
-        //     key: "price_per_km",
-        //   },
-        //   {
-        //     title: "Price/hour ($)",
-        //     dataIndex: "price_per_hour",
-        //     key: "price_per_hour",
-        //   },
-        //   {
-        //     title: "Tax (%)",
-        //     dataIndex: "taxs",
-        //     key: "taxs",
-        //   },
         {
-            title: "Fixed Price ($)",
-            dataIndex: "fixed_price",
-            key: "fixed_price",
+            title: "Price/km ($)",
+            dataIndex: "price_per_km",
+            key: "price_per_km",
+        },
+        {
+            title: "Price/hour ($)",
+            dataIndex: "price_per_hour",
+            key: "price_per_hour",
+        },
+        {
+            title: "Tax (%)",
+            dataIndex: "taxs",
+            key: "taxs",
         },
         {
             title: 'Action',
@@ -308,45 +151,45 @@ const Services = () => {
                     <button onClick={() => { setIsOpen(true); setEditData(record) }}>
                         <AiOutlineEdit className="text-xl text-primary" />
                     </button>
-                    <button>
+                    <button onClick={() => handleDelete(record.id)}>
                         <IoTrashOutline className="text-xl text-red-500" />
                     </button>
                 </div>
             ),
         },
-    ]; 
+    ];
 
     return (
         <div>
             <div>
-                        <Flex className="my-2" vertical={false} gap={10} align="center" justify="space-between">
-                <div>
-                    <h1 className="text-2xl text-primary font-semibold">Manage Services</h1>
-                </div>
+                <Flex className="my-2" vertical={false} gap={10} align="center" justify="space-between">
+                    <div>
+                        <h1 className="text-2xl text-primary font-semibold">Manage Services</h1>
+                    </div>
 
-                <div
-                    style={{
-                        marginBottom: 10,
-                    }}
-                >
-                    <Button
-                        onClick={() => setIsOpen(true)}
+                    <div
                         style={{
-                            height: 40,
+                            marginBottom: 10,
                         }}
-                        type="primary"
                     >
-                        Add Services
-                    </Button>
-                </div>
-            </Flex> 
+                        <Button
+                            onClick={() => setIsOpen(true)}
+                            style={{
+                                height: 40,
+                            }}
+                            type="primary"
+                        >
+                            Add Services
+                        </Button>
+                    </div>
+                </Flex>
                 <Table
                     columns={serviceColumns}
                     dataSource={serviceData}
-                    pagination={{ pageSize: 8}}
+                    pagination={false}
                 />
-            </div> 
-            <AddServicesModal isOpen={isOpen} setIsOpen={setIsOpen} editData={editData} setEditData={setEditData} />
+            </div>
+            <AddServicesModal isOpen={isOpen} setIsOpen={setIsOpen} editData={editData} setEditData={setEditData} refetch={refetch} />
         </div>
     );
 };

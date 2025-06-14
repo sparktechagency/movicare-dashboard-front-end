@@ -1,6 +1,8 @@
 import { Button, Form, Input, InputNumber, Modal } from "antd";
 import { useEffect, useState } from "react";
 import { PiImageThin } from "react-icons/pi";
+import { useCreateServiceMutation, useUpdateServiceMutation } from "../../redux/apiSlices/servicesSlice";
+import Swal from "sweetalert2";
 
 type Service = {
     id: number;
@@ -21,16 +23,21 @@ const AddServicesModal = ({
     isOpen,
     setIsOpen,
     editData,
-    setEditData
+    setEditData , 
+    refetch
 }: {
     isOpen: boolean;
     setIsOpen: (isOpen: boolean) => void;
     editData: Service | null;
-    setEditData: (data: Service | null) => void;
+    setEditData: (data: Service | null) => void; 
+    refetch: () => void
 }) => {
     const [form] = Form.useForm();
     const [imgFile, setImgFile] = useState<File | null>(null);
-    const [imageUrl, setImageUrl] = useState<string | undefined>();
+    const [imageUrl, setImageUrl] = useState<string | null>();
+    const [createService] = useCreateServiceMutation();
+    const [updateService] = useUpdateServiceMutation();
+    console.log(editData);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -40,17 +47,78 @@ const AddServicesModal = ({
         }
     };
 
-    const handleSubmit = (values: any) => {
-        console.log("Form Values:", {
-            ...values,
-            image: imgFile
+    const handleSubmit = async (values: any) => {
+        const formData = new FormData();
+
+        if (imgFile) {
+            formData.append("image", imgFile);
+        }
+
+        Object.entries(values).forEach(([key, value]: [string, any]) => {
+            formData.append(key, value as any);
         });
-        setIsOpen(false);
-        setEditData(null);
-        form.resetFields();
-        setImgFile(null);
-        setImageUrl(undefined);
-    };
+
+        if (editData?.id) {
+            await updateService({ id: editData?.id, value: formData }).then(
+                (res) => { 
+                    console.log("edit response", res);
+                    if (res?.data?.success) {
+                        Swal.fire({
+                            text: res?.data?.message,
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500,
+                        }).then(() => {
+                            setIsOpen(false);
+                            setEditData(null);
+                            form.resetFields();
+                            setImageUrl(null);
+                            refetch();
+
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "Oops",
+                            //@ts-ignore
+                            text: res?.error?.data?.message,
+                            icon: "error",
+                            timer: 1500,
+                            showConfirmButton: false,
+                        });
+                    }
+                }
+            );
+        } else {
+            await createService(formData).then((res) => {
+  console.log("add response", res);
+                if (res?.data?.success) {
+                    Swal.fire({
+                        text: res?.data?.message,
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    }).then(() => {
+                        refetch();
+                        setIsOpen(false);
+                        setEditData(null);
+                        form.resetFields();
+                        setImgFile(null);
+                        setImageUrl(undefined);
+                    });
+                } else {
+                    Swal.fire({
+                        title: "Oops",
+                        //@ts-ignore
+                        text: res?.error?.data?.message,
+                        icon: "error",
+                        timer: 1500,
+                        showConfirmButton: false,
+                    });
+                }
+            });
+
+        };
+    }
 
     useEffect(() => {
         if (editData) {
@@ -71,7 +139,7 @@ const AddServicesModal = ({
                 setImageUrl(undefined);
             }}
             footer={null}
-            width="800px" 
+            width="800px"
             centered
         >
             <Form
@@ -103,20 +171,15 @@ const AddServicesModal = ({
                             </div>
                         </div>
 
-
-
+                        <Form.Item label="Adult Price ($)" name="adults_price" rules={[{ required: true }]}>
+                            <InputNumber placeholder="Enter adult price" style={{ width: "100%", height: 42 }} />
+                        </Form.Item>
                         <Form.Item label="Fixed Price ($)" name="fixed_price" rules={[{ required: true }]}>
                             <InputNumber placeholder="Enter fixed price" style={{ width: "100%", height: 42 }} />
-                        </Form.Item> 
-                        
-         
-
+                        </Form.Item>
                     </div>
 
                     <div>
-
-     
-
                         <Form.Item label="Kids Price ($)" name="kids_price" rules={[{ required: true }]}>
                             <InputNumber placeholder="Enter kids price" style={{ width: "100%", height: 42 }} />
                         </Form.Item>
@@ -136,19 +199,19 @@ const AddServicesModal = ({
                             <InputNumber placeholder="Enter tax percentage" style={{ width: "100%", height: 43 }} />
                         </Form.Item>
 
+                        <Form.Item label="Button Text" name="button_text" rules={[{ required: true }]}>
+                            <Input placeholder="Enter Button Text" style={{ width: "100%", height: 43 }} />
+                        </Form.Item>
 
                     </div>
-                </div> 
-                          <Form.Item label="Adult Price ($)" name="adults_price" rules={[{ required: true }]}>
-                            <InputNumber placeholder="Enter adult price" style={{ width: "100%", height: 42 }} />
-                        </Form.Item> 
-                        
+                </div>
+
                 <Form.Item label="Description" name="description" rules={[{ required: true }]}>
-                    <Input.TextArea rows={3} placeholder="Enter class description" />
+                    <Input.TextArea rows={4} placeholder="Enter class description" />
                 </Form.Item>
 
                 <Form.Item>
-                    <div className="flex justify-center w-full mt-5">
+                    <div className="flex justify-center w-full mt-4">
                         <Button type="primary" htmlType="submit" style={{ height: 40 }}>
                             {editData ? "Update Class" : "Create Class"}
                         </Button>
