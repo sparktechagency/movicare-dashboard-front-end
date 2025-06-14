@@ -8,10 +8,10 @@ import { PiImageThin } from "react-icons/pi";
 
 type ClassData = {
     id: string;
-    className: string;
-    classImage: string;
+    name: string;
+    image: string;
     description: string;
-    features: string[];
+    facilities: string[];
     price: number;
 };
 
@@ -53,9 +53,9 @@ const CreateClassModal = ({
     useEffect(() => {
         if (editData) {
             form.setFieldsValue(editData);
-            setImageUrl(editData.classImage);
+            setImageUrl(editData.image);
         }
-    }, [editData , form , setImageUrl]);
+    }, [editData, form, setImageUrl]);
 
     return (
         <Modal
@@ -69,7 +69,7 @@ const CreateClassModal = ({
                 setImageUrl(undefined);
             }}
             footer={null}
-            width="800px" 
+            width="800px"
             centered
         >
             <Form
@@ -80,7 +80,7 @@ const CreateClassModal = ({
             >
                 <div className="grid grid-cols-2 gap-4 mt-5">
                     <div>
-                        <Form.Item label="Class Name" name="className" rules={[{ required: true }]}>
+                        <Form.Item label="Class Name" name="name" rules={[{ required: true }]}>
                             <Input placeholder="Enter Class Name" style={{ height: 42 }} />
                         </Form.Item>
 
@@ -94,11 +94,11 @@ const CreateClassModal = ({
                                         <PiImageThin className="text-8xl text-[#666666]" />
                                     )}
                                 </div>
-                            </label> 
+                            </label>
                             <div className="hidden">
-     <input id="image" type="file" accept="image/*" onChange={handleChange} className=" hidden" />
+                                <input id="image" type="file" accept="image/*" onChange={handleChange} className=" hidden" />
                             </div>
-                       
+
                         </div>
                     </div>
 
@@ -111,7 +111,7 @@ const CreateClassModal = ({
                             <InputNumber placeholder="Enter price" style={{ width: "100%", height: 42 }} />
                         </Form.Item>
 
-                        <Form.List name="features">
+                        <Form.List name="facilities">
                             {(fields, { add, remove }) => (
                                 <>
                                     <label className="block text-sm font-medium mb-1">Features</label>
@@ -129,7 +129,7 @@ const CreateClassModal = ({
                                         </Space>
                                     ))}
                                     <Form.Item>
-                                        <Button type="dashed"  onClick={() => add()} block icon={<PlusOutlined />}>
+                                        <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
                                             Add Feature
                                         </Button>
                                     </Form.Item>

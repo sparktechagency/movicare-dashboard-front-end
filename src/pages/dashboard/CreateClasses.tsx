@@ -4,168 +4,48 @@ import { IoTrashOutline } from 'react-icons/io5';
 
 import { AiOutlineEdit } from 'react-icons/ai';
 import CreateClassModal from '../../components/modals/CreateClassModal';
+import { useGetAllProviderQuery } from '../../redux/apiSlices/classSlice';
 
 type ClassData = {
     id: string;
-    className: string;
-    classImage: string;
+    name: string;
+    image: string;
     description: string;
-    features: string[];
+    facilities: string[];
     price: number;
 };
 const CreateClasses = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const [editData, setEditData] = useState<ClassData | null>(null);
+    const [editData, setEditData] = useState<ClassData | null>(null);  
+    const {data :allClasses} = useGetAllProviderQuery(undefined) 
+    console.log(allClasses); 
 
-    const classData: ClassData[] = [
-        {
-            id: '01',
-            className: 'Beauty & Fashion Masterclass',
-            classImage: '/car.svg',
-            description: 'Learn the latest trends in beauty and fashion from industry professionals.',
-            features: [
-                'Makeup tutorials by experts',
-                'Fashion styling guides',
-                'Wardrobe essentials',
-                'Skincare routines',
-            ],
-            price: 49.99,
-        },
-        {
-            id: '02',
-            className: 'Health & Fitness Bootcamp',
-            classImage: '/car.svg',
-            description: 'Transform your lifestyle with this all-in-one health and fitness program.',
-            features: [
-                'Daily workout plans',
-                'Personal diet tracking',
-                'Live fitness coaching',
-                'Mental wellness sessions',
-            ],
-            price: 59.99,
-        },
-        {
-            id: '03',
-            className: 'Travel & Adventure Guide',
-            classImage: '/car.svg',
-            description: 'Explore the world with practical travel advice and thrilling adventures.',
-            features: [
-                'Travel hacks & packing tips',
-                'Top destinations uncovered',
-                'Solo & group travel planning',
-                'Adventure vlogging tips',
-            ],
-            price: 39.99,
-        },
-        {
-            id: '04',
-            className: 'Food & Beverage Academy',
-            classImage: '/car.svg',
-            description: 'Cook, taste, and explore cuisines from around the world.',
-            features: [
-                'Live cooking sessions',
-                'Global cuisine recipes',
-                'Beverage pairing tips',
-                'Nutrition fundamentals',
-            ],
-            price: 44.99,
-        },
-        {
-            id: '05',
-            className: 'Tech & Gadgets Workshop',
-            classImage: '/car.svg',
-            description: 'Stay ahead with the latest in tech trends and gadgets.',
-            features: [
-                'Gadget reviews & unboxings',
-                'Hands-on tech tutorials',
-                'Smart home integration',
-                'Coding for beginners',
-            ],
-            price: 64.99,
-        },
-        {
-            id: '06',
-            className: 'Lifestyle & Vlogging 101',
-            classImage: '/car.svg',
-            description: 'Build your personal brand through lifestyle vlogging.',
-            features: [
-                'Content planning',
-                'Editing for engagement',
-                'Camera setup & lighting',
-                'Audience growth tactics',
-            ],
-            price: 42.99,
-        },
-        {
-            id: '07',
-            className: 'Parenting & Family Life Course',
-            classImage: '/car.svg',
-            description: 'Practical advice for raising children and nurturing family relationships.',
-            features: [
-                'Parenting tips by age group',
-                'Family communication techniques',
-                'Child safety & development',
-                'Work-life balance advice',
-            ],
-            price: 35.00,
-        },
-        {
-            id: '08',
-            className: 'Entertainment & Gaming Zone',
-            classImage: '/car.svg',
-            description: 'Dive into the world of entertainment content creation and gaming.',
-            features: [
-                'Streaming setup & software',
-                'Game reviews & walkthroughs',
-                'Voiceover & commentary tips',
-                'Monetization strategies',
-            ],
-            price: 55.00,
-        },
-        {
-            id: '09',
-            className: 'Business & Finance Blueprint',
-            classImage: '/car.svg',
-            description: 'Master your finances and build successful business strategies.',
-            features: [
-                'Investment fundamentals',
-                'Budgeting & saving plans',
-                'Business startup guides',
-                'Marketing & branding tips',
-            ],
-            price: 69.99,
-        },
-        {
-            id: '10',
-            className: 'Business & Finance Blueprint',
-            classImage: '/car.svg',
-            description: 'Master your finances and build successful business strategies.',
-            features: [
-                'Investment fundamentals',
-                'Budgeting & saving plans',
-                'Business startup guides',
-                'Marketing & branding tips',
-            ],
-            price: 69.99,
-        },
-    ];
+    const classData = allClasses?.data?.data?.map((item: any , index :number) => ({ 
+        key:index+1 ,
+        id: item._id,
+        name: item.name,
+        image: "/car.svg",
+        description: item.description, 
+        facilities: item.facilities,
+        price: item.price,
+    }));
 
     const columns = [
         {
             title: 'ID',
-            dataIndex: 'id',
-            key: 'id',
+            dataIndex: 'key',
+            key: 'key',
             width: "100px"
         },
         {
             title: 'Class Name',
-            dataIndex: 'className',
-            key: 'className',
+            dataIndex: 'name',
+            key: 'name',
         },
         {
             title: 'Class Image',
-            dataIndex: 'classImage',
-            key: 'classImage',
+            dataIndex: 'image',
+            key: 'image',
             width: "250px",
             render: (image: string) => (
                 <img src={image} alt="Class" style={{ height: 50, objectFit: 'cover', borderRadius: 4 }} />
