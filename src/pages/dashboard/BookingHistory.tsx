@@ -39,7 +39,6 @@ const BookingHistory = () => {
   const limit = 7
   const { data: allBookings, refetch } = useGetBookingHistoryQuery({ search, page, limit, status });
   const [updateBookingStatus] = useUpdateBookingStatusMutation();
-  console.log("allBookings", allBookings);
 
   const handleStatusChange = (id: any, value: string) => { 
     const data = { 
@@ -47,7 +46,6 @@ const BookingHistory = () => {
       status: value
     }
     updateBookingStatus(data).then((res) => { 
-      console.log("edit response", res);
       if (res?.data?.success) {
         Swal.fire({
           text: res?.data?.message,

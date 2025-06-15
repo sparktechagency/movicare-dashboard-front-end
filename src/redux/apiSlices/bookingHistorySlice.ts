@@ -25,7 +25,6 @@ const bookingHistorySlice = api.injectEndpoints({
 
         updateBookingStatus: builder.mutation({
             query: (data) => { 
-                console.log("updateBookingStatus", data);
                 return {
                     url: `/booking/${data?.id}`,
                     method: "PATCH",

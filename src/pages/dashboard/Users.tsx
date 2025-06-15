@@ -9,7 +9,7 @@ const Users = () => {
   const [page, setPage] = useState<number>(1); 
   const limit = 8
   const { data: users } = useGetAllUserQuery({ search, page , limit})
-  console.log(users);
+
 
   const data = users?.data?.map((item: { _id: string, name: string, image: string, email: string, contact: string } , index :number) => ({
     key: index + 1,

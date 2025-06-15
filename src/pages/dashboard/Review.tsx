@@ -14,7 +14,6 @@ const Review = () => {
     const { data: allReviews, refetch } = useGetAllReviewsQuery({});
     const [updateReview] = useUpdateReviewMutation();  
     const [deleteReview] = useDeleteReviewMutation();
-    console.log(allReviews); 
 
      const handleDelete = async (id: string) => {
         Swal.fire({

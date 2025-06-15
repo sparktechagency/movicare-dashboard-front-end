@@ -25,7 +25,6 @@ const AddFaqForm = ({ setModalData, modalData, openAddModel, setOpenAddModel, re
 
         if (modalData?.id) {
             await updateFaq(data).then((res) => { 
-                  console.log(res);
                 if (res?.data?.success) {
                     Swal.fire({
                         text: res?.data?.message,

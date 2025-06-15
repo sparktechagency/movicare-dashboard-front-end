@@ -30,7 +30,6 @@ const Services = () => {
     const [editData, setEditData] = useState<Service | null>(null);
     const { data: allServices, refetch } = useGetAllServicesQuery(undefined);
     const [deleteService] = useDeleteServiceMutation(); 
-    console.log(allServices);
 
     const serviceData = allServices?.data.map((service: any, index: number) => ({
         key: index + 1,

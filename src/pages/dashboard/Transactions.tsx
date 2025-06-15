@@ -5,104 +5,11 @@ import { useGetAllTransactionQuery } from '../../redux/apiSlices/transactionSlic
 import { useState } from 'react';
 
 
-const data = [
-  {
-    key: '1',
-    username: 'john_doe',
-    email: 'john@example.com',
-    transactionId: 'TXN123456',
-    serviceName: 'Spa & Wellness',
-    className: 'Luxury Spa Treatment',
-    serial: 1,
-  },
-  {
-    key: '2',
-    username: 'jane_smith',
-    email: 'jane@example.com',
-    transactionId: 'TXN654321',
-    serviceName: 'City Transfer',
-    className: 'Urban Transfer',
-    serial: 2,
-  },
-  {
-    key: '3',
-    username: 'alice_lee',
-    email: 'alice@example.com',
-    transactionId: 'TXN789012',
-    serviceName: 'Event Coverage',
-    className: 'Premium Coverage',
-    serial: 3,
-  },
-  {
-    key: '4',
-    username: 'bob_marley',
-    email: 'bob@example.com',
-    transactionId: 'TXN345678',
-    serviceName: 'Photo Shoot',
-    className: 'Outdoor Deluxe',
-    serial: 4,
-  },
-  {
-    key: '5',
-    username: 'emma_watson',
-    email: 'emma@example.com',
-    transactionId: 'TXN901234',
-    serviceName: 'Fitness Training',
-    className: 'Yoga Flex Session',
-    serial: 5,
-  },
-  {
-    key: '6',
-    username: 'tom_hardy',
-    email: 'tom@example.com',
-    transactionId: 'TXN567890',
-    serviceName: 'Chauffeur Service',
-    className: 'Executive Transfer',
-    serial: 6,
-  },
-  {
-    key: '7',
-    username: 'lisa_kudrow',
-    email: 'lisa@example.com',
-    transactionId: 'TXN112233',
-    serviceName: 'Hair & Makeup',
-    className: 'Bridal Glow Package',
-    serial: 7,
-  },
-  {
-    key: '8',
-    username: 'mark_twain',
-    email: 'mark@example.com',
-    transactionId: 'TXN445566',
-    serviceName: 'Photography',
-    className: 'Studio Portraits',
-    serial: 8,
-  },
-  {
-    key: '9',
-    username: 'nina_dobrev',
-    email: 'nina@example.com',
-    transactionId: 'TXN778899',
-    serviceName: 'Massage Therapy',
-    className: 'Deep Tissue Treatment',
-    serial: 9,
-  },
-  {
-    key: '10',
-    username: 'david_guetta',
-    email: 'david@example.com',
-    transactionId: 'TXN000111',
-    serviceName: 'DJ Booking',
-    className: 'Premium Night Set',
-    serial: 10,
-  },
-];
-
 const Transactions = () => {  
   const [search , setSearch] = useState(""); 
   const [page , setPage] = useState(1);
   const {data: transactions} = useGetAllTransactionQuery({search , page}); 
-  console.log(transactions); 
+
 
   const data = transactions?.data?.map((transaction:{ user: { name: string; email: string; }; transaction_id: string; service: { name: string; }; provider: { name: string; }; }, index:number) => ({
     key: index + 1,

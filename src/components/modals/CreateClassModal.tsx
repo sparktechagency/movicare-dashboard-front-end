@@ -44,19 +44,10 @@ const CreateClassModal = ({
     // };
 
     const handleSubmit = async (values: any) => {
-        console.log("Form Values:", {
-            ...values,
-        });
-        setIsOpen(false);
-        setEditData(null);
-        form.resetFields();
-        // setImgFile(null);
-        // setImageUrl(undefined); 
 
         if (editData?.id) {
             await updateProvider({ id: editData?.id, value: values }).then(
                 (res) => {
-                    console.log("edit response", res);
                     if (res?.data?.success) {
                         Swal.fire({
                             text: res?.data?.message,
@@ -84,7 +75,6 @@ const CreateClassModal = ({
             );
         } else {
             await createProvider(values).then((res) => {
-                console.log("add response", res);
                 if (res?.data?.success) {
                     Swal.fire({
                         text: res?.data?.message,

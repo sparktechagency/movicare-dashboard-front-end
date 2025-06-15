@@ -41,7 +41,6 @@ const CreateWhyChooseModal = ({ isOpen, setIsOpen, editData, setEditData, refetc
     }, [editData, form, setImageUrl]);
 
     const OnFinish = async (values: { title: string, description: string }) => { 
-        console.log("Form Values:", values);
 
         const formData = new FormData();
 
@@ -56,7 +55,6 @@ const CreateWhyChooseModal = ({ isOpen, setIsOpen, editData, setEditData, refetc
         if (editData?.id) {
             await updateWhyChoose({ id: editData?.id, value: formData }).then(
                 (res) => {
-                    console.log("edit response", res);
                     if (res?.data?.success) {
                         Swal.fire({
                             text: res?.data?.message,
@@ -85,7 +83,6 @@ const CreateWhyChooseModal = ({ isOpen, setIsOpen, editData, setEditData, refetc
             );
         } else {
             await createWhyChoose(formData).then((res) => {
-                console.log("add response", res);
                 if (res?.data?.success) {
                     Swal.fire({
                         text: res?.data?.message,

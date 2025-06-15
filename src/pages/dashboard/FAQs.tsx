@@ -3,7 +3,7 @@ import { GoQuestion } from 'react-icons/go';
 import { CiEdit } from 'react-icons/ci';
 import { RxCross2 } from 'react-icons/rx';
 import Swal from 'sweetalert2';
-import { Button, ConfigProvider, Flex, Pagination } from 'antd';
+import { Button, ConfigProvider, Flex } from 'antd';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { useDeleteFaqMutation, useGetFaqQuery } from '../../redux/apiSlices/faqSlice';
 import AddFaqForm from '../../components/modals/AddFaqForm';

@@ -20,11 +20,12 @@ import BookingHistory from '../pages/dashboard/BookingHistory';
 import Transactions from '../pages/dashboard/Transactions';
 import Companies from '../pages/dashboard/Companies';
 import WhyChoose from '../pages/dashboard/WhyChoose';
+import PrivateRoute from '../provider/PrivateProvider';
 
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <App />,
+        element: <PrivateRoute> <App /> </PrivateRoute> ,
         errorElement: <ErrorPage />,
         children: [
             { path: '', element: <Dashboard /> },

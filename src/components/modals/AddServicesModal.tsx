@@ -37,7 +37,6 @@ const AddServicesModal = ({
     const [imageUrl, setImageUrl] = useState<string | null>();
     const [createService] = useCreateServiceMutation();
     const [updateService] = useUpdateServiceMutation();
-    console.log(editData);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -61,7 +60,6 @@ const AddServicesModal = ({
         if (editData?.id) {
             await updateService({ id: editData?.id, value: formData }).then(
                 (res) => { 
-                    console.log("edit response", res);
                     if (res?.data?.success) {
                         Swal.fire({
                             text: res?.data?.message,
@@ -90,7 +88,6 @@ const AddServicesModal = ({
             );
         } else {
             await createService(formData).then((res) => {
-  console.log("add response", res);
                 if (res?.data?.success) {
                     Swal.fire({
                         text: res?.data?.message,

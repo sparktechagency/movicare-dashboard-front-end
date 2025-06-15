@@ -21,7 +21,6 @@ const WhyChoose = () => {
   const [page  , setPage] = useState(1)
   const { data: allWhyChoose, refetch } = useGetWhyChooseQuery({});
   const [deleteWhyChoose] = useDeleteWhyChooseMutation();
-  console.log(allWhyChoose);
 
   const contentData = allWhyChoose?.data?.map((item: { _id: string, title: string, image: string, description: string }, index: number) => ({
     key: index + 1,
