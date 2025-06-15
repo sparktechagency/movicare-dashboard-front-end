@@ -8,7 +8,7 @@ const { Header } = Layout;
 
 const HeaderDashboard = () => { 
     const user = useContext(UserContext); 
-    console.log(user);
+
     return (
         <Header
             style={{

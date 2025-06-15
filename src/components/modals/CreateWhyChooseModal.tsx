@@ -1,24 +1,29 @@
 import { Button, Form, Input, Modal } from "antd";
 import { useEffect, useState } from "react";
 import { PiImageThin } from "react-icons/pi";
+import Swal from "sweetalert2";
+import { useCreateWhyChooseMutation, useUpdateWhyChooseMutation } from "../../redux/apiSlices/whyChooseSlice";
 
 type contentType = {
-  id: string;
-  contentTitle: string;
-  contentImage: string;
-  description: string;
-}; 
+    id: string;
+    title: string;
+    image: string;
+    description: string;
+};
 
-const CreateWhyChooseModal = ({ isOpen, setIsOpen, editData, setEditData }: {
+const CreateWhyChooseModal = ({ isOpen, setIsOpen, editData, setEditData, refetch }: {
     isOpen: boolean;
     setIsOpen: (isOpen: boolean) => void;
     editData: contentType | null;
     setEditData: (data: contentType | null) => void;
+    refetch: () => void
 }) => {
 
     const [form] = Form.useForm();
     const [imgFile, setImgFile] = useState<File | null>(null);
-    const [imageUrl, setImageUrl] = useState<string | undefined>();
+    const [imageUrl, setImageUrl] = useState<string | null>();
+    const [createWhyChoose] = useCreateWhyChooseMutation();
+    const [updateWhyChoose] = useUpdateWhyChooseMutation();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -31,20 +36,83 @@ const CreateWhyChooseModal = ({ isOpen, setIsOpen, editData, setEditData }: {
     useEffect(() => {
         if (editData) {
             form.setFieldsValue(editData);
-            setImageUrl(editData.contentImage);
+            setImageUrl(editData.image);
         }
     }, [editData, form, setImageUrl]);
 
-    const OnFinish = (values:{contentTitle:string , description:string}) => {
-                console.log("Form Values:", {
-            ...values,
-            image: imgFile
+    const OnFinish = async (values: { title: string, description: string }) => { 
+        console.log("Form Values:", values);
+
+        const formData = new FormData();
+
+        if (imgFile) {
+            formData.append("image", imgFile);
+        }
+
+        Object.entries(values).forEach(([key, value]: [string, any]) => {
+            formData.append(key, value as any);
         });
-        setIsOpen(false);
-        setEditData(null);
-        form.resetFields();
-        setImgFile(null);
-        setImageUrl(undefined);
+
+        if (editData?.id) {
+            await updateWhyChoose({ id: editData?.id, value: formData }).then(
+                (res) => {
+                    console.log("edit response", res);
+                    if (res?.data?.success) {
+                        Swal.fire({
+                            text: res?.data?.message,
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500,
+                        }).then(() => {
+                            setIsOpen(false);
+                            setEditData(null);
+                            form.resetFields();
+                            setImageUrl(null);
+                            refetch();
+
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "Oops",
+                            //@ts-ignore
+                            text: res?.error?.data?.message,
+                            icon: "error",
+                            timer: 1500,
+                            showConfirmButton: false,
+                        });
+                    }
+                }
+            );
+        } else {
+            await createWhyChoose(formData).then((res) => {
+                console.log("add response", res);
+                if (res?.data?.success) {
+                    Swal.fire({
+                        text: res?.data?.message,
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    }).then(() => {
+                        refetch();
+                        setIsOpen(false);
+                        setEditData(null);
+                        form.resetFields();
+                        setImgFile(null);
+                        setImageUrl(undefined);
+                    });
+                } else {
+                    Swal.fire({
+                        title: "Oops",
+                        //@ts-ignore
+                        text: res?.error?.data?.message,
+                        icon: "error",
+                        timer: 1500,
+                        showConfirmButton: false,
+                    });
+                }
+            });
+
+        };
     }
 
     return (
@@ -63,7 +131,7 @@ const CreateWhyChooseModal = ({ isOpen, setIsOpen, editData, setEditData }: {
             centered
         >
             <Form layout="vertical" form={form} onFinish={OnFinish}>
-                <Form.Item label="Content Title" name="contentTitle" rules={[{ required: true }]}>
+                <Form.Item label="Content Title" name="title" rules={[{ required: true }]}>
                     <Input placeholder="Enter content title" style={{ height: 42 }} />
                 </Form.Item>
 

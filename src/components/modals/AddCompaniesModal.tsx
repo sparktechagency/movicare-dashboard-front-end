@@ -1,15 +1,19 @@
 import { Button, Form, Modal } from "antd";
 import { useState } from "react";
 import { PiImageThin } from "react-icons/pi";
+import { useCreateCompaniesMutation } from "../../redux/apiSlices/companiesSlice";
+import Swal from "sweetalert2";
 
-const AddCompaniesModal = ({ isOpen, setIsOpen }: {
+const AddCompaniesModal = ({ isOpen, setIsOpen , refetch }: {
     isOpen: boolean;
-    setIsOpen: (isOpen: boolean) => void;
+    setIsOpen: (isOpen: boolean) => void; 
+    refetch: () => void
 }) => {
 
     const [form] = Form.useForm();
     const [imgFile, setImgFile] = useState<File | null>(null);
-    const [imageUrl, setImageUrl] = useState<string | undefined>();
+    const [imageUrl, setImageUrl] = useState<string | undefined>(); 
+    const [createCompanies] = useCreateCompaniesMutation();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -20,7 +24,28 @@ const AddCompaniesModal = ({ isOpen, setIsOpen }: {
     };
  
     const OnFinish =()=>{
-    console.log(imgFile); 
+const formData = new FormData(); 
+
+if (imgFile) {
+    formData.append("image", imgFile);
+} 
+
+createCompanies(formData).then((res) => {
+    if (res?.data?.success) {
+        Swal.fire({
+            text: res?.data?.message,
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+        }).then(() => {
+            setIsOpen(false);
+            form.resetFields();
+            setImgFile(null);
+            setImageUrl(undefined);
+            refetch();
+        });
+    }
+})
     } 
 
     return (

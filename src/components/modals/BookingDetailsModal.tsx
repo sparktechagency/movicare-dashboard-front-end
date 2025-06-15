@@ -51,7 +51,7 @@ const BookingDetailsModal = ({showDetails}:{showDetails:BookingHistory|null}) =>
                     </p>
                     <p className="flex justify-between">
                         <span className="font-medium">Price:</span>
-                        <span>{showDetails?.price}</span>
+                        <span>{showDetails?.price} $</span>
                     </p>
                     <p className="flex justify-between">
                         <span className="font-medium">Total Adult:</span>

@@ -1,6 +1,8 @@
-import { Table, Input } from 'antd';
+import { Table, Input, Pagination } from 'antd';
 
 import { SearchOutlined } from '@ant-design/icons';
+import { useGetAllTransactionQuery } from '../../redux/apiSlices/transactionSlice';
+import { useState } from 'react';
 
 
 const data = [
@@ -96,7 +98,21 @@ const data = [
   },
 ];
 
-const Transactions = () => {
+const Transactions = () => {  
+  const [search , setSearch] = useState(""); 
+  const [page , setPage] = useState(1);
+  const {data: transactions} = useGetAllTransactionQuery({search , page}); 
+  console.log(transactions); 
+
+  const data = transactions?.data?.map((transaction:{ user: { name: string; email: string; }; transaction_id: string; service: { name: string; }; provider: { name: string; }; }, index:number) => ({
+    key: index + 1,
+    username: transaction?.user?.name,
+    email: transaction?.user?.email,
+    transactionId: transaction?.transaction_id,
+    serviceName: transaction?.service?.name,
+    className: transaction?.provider?.name,
+    serial: index + 1,
+  }));
  
   const columns = [
     {
@@ -143,12 +159,17 @@ const Transactions = () => {
                             height: 42,
                         }}
                         placeholder="Search"
-                        prefix={<SearchOutlined />}
+                        prefix={<SearchOutlined />} 
+                        onChange={(e) => setSearch(e.target.value)}
                     />
                
                 </div>
             </div>
-            <Table columns={columns} dataSource={data} rowClassName="hover:bg-gray-100" />
+            <Table columns={columns} dataSource={data} rowClassName="hover:bg-gray-100" pagination={false} />  
+            {
+              transactions?.pagination?.total > 10 &&
+              <Pagination current={page} onChange={(page) => setPage(page)} total={transactions?.pagination?.total} />
+            }         
            
         </div>
     );

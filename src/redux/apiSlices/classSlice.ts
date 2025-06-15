@@ -24,7 +24,7 @@ const classSlice = api.injectEndpoints({
             query: ({id , value}) => {
               return {
                 url: `/provider/${id}`,
-                method: "PATCH",
+                method: "PUT",
                 body: value,
               };
             },

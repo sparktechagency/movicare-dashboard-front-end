@@ -1,4 +1,4 @@
-import { Table, Input, Select } from 'antd';
+import { Table, Input, Select, Pagination } from 'antd';
 import { Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { SearchOutlined } from '@ant-design/icons';
@@ -6,277 +6,203 @@ import { useState } from 'react';
 import CustomModal from '../../components/shared/CustomModal';
 import { ImInfo } from 'react-icons/im';
 import BookingDetailsModal from '../../components/modals/BookingDetailsModal';
+import { useGetBookingHistoryQuery, useUpdateBookingStatusMutation } from '../../redux/apiSlices/bookingHistorySlice';
+import moment from 'moment';
+import { imageUrl } from '../../redux/api/baseApi';
+import Swal from 'sweetalert2';
 
-const { Option } = Select; 
+const { Option } = Select;
 
 type BookingHistory = {
   key: number;
-  date: string; 
+  date: string;
   pickupCity: string;
   dropOffCity: string;
-  distance: number; 
+  distance: number;
   className: string;
-  classImage: string; 
+  classImage: string;
   serviceName: string;
-  price: number; 
+  price: number;
   totalAdults: number;
   totalKids: number;
-  status: 'Completed' | 'Canceled' | 'Active' | string; 
+  status: 'Completed' | 'Canceled' | 'Active' | string;
 };
 
-const bookingsData:BookingHistory[] = [
-  {
-    key: 1,
-    date: "2025-05-18",
-    pickupCity: "New York",
-    dropOffCity: "Boston",
-    distance: 215,
-    className: "Luxury Spa Treatment",
-    classImage: "/car.svg",
-    serviceName: "Spa & Wellness",
-    price: 150,
-    totalAdults: 2,
-    totalKids: 1,
-    status: "Completed",
-  },
-  {
-    key: 2,
-    date: "2025-05-17",
-    pickupCity: "Los Angeles",
-    dropOffCity: "San Diego",
-    distance: 195,
-    className: "Executive Car Service",
-    classImage: "/car.svg",
-    serviceName: "Transportation",
-    price: 200,
-    totalAdults: 1,
-    totalKids: 0,
-    status: "Pending",
-  },
-  {
-    key: 3,
-    date: "2025-05-16",
-    pickupCity: "Chicago",
-    dropOffCity: "Milwaukee",
-    distance: 150,
-    className: "Family Van Ride",
-    classImage: "/car.svg",
-    serviceName: "Shuttle",
-    price: 180,
-    totalAdults: 2,
-    totalKids: 2,
-    status: "Canceled",
-  },
-  {
-    key: 4,
-    date: "2025-05-15",
-    pickupCity: "Miami",
-    dropOffCity: "Orlando",
-    distance: 380,
-    className: "Wellness Retreat Ride",
-    classImage: "/car.svg",
-    serviceName: "Wellness Travel",
-    price: 250,
-    totalAdults: 3,
-    totalKids: 1,
-    status: "Completed",
-  },
-  {
-    key: 5,
-    date: "2025-05-14",
-    pickupCity: "Houston",
-    dropOffCity: "Austin",
-    distance: 265,
-    className: "Business Shuttle",
-    classImage: "/car.svg",
-    serviceName: "Corporate Travel",
-    price: 175,
-    totalAdults: 1,
-    totalKids: 0,
-    status: "Pending",
-  },
-  {
-    key: 6,
-    date: "2025-05-13",
-    pickupCity: "Seattle",
-    dropOffCity: "Portland",
-    distance: 280,
-    className: "Nature Explorer",
-    classImage: "/car.svg",
-    serviceName: "Adventure",
-    price: 220,
-    totalAdults: 2,
-    totalKids: 2,
-    status: "Canceled",
-  },
-  {
-    key: 7,
-    date: "2025-05-12",
-    pickupCity: "Dallas",
-    dropOffCity: "Fort Worth",
-    distance: 55,
-    className: "Quick Ride",
-    classImage: "/car.svg",
-    serviceName: "Local Commute",
-    price: 60,
-    totalAdults: 1,
-    totalKids: 1,
-    status: "Completed",
-  },
-  {
-    key: 8,
-    date: "2025-05-11",
-    pickupCity: "Denver",
-    dropOffCity: "Colorado Springs",
-    distance: 115,
-    className: "Mountain Journey",
-    classImage: "/car.svg",
-    serviceName: "Tourism",
-    price: 190,
-    totalAdults: 2,
-    totalKids: 1,
-    status: "Pending",
-  },
-  {
-    key: 9,
-    date: "2025-05-10",
-    pickupCity: "Phoenix",
-    dropOffCity: "Tucson",
-    distance: 180,
-    className: "Desert Trip",
-    classImage: "/car.svg",
-    serviceName: "Tour & Travel",
-    price: 160,
-    totalAdults: 2,
-    totalKids: 0,
-    status: "Completed",
-  },
-  {
-    key: 10,
-    date: "2025-05-09",
-    pickupCity: "San Francisco",
-    dropOffCity: "Sacramento",
-    distance: 145,
-    className: "Urban Transfer",
-    classImage: "/car.svg",
-    serviceName: "City Transfer",
-    price: 140,
-    totalAdults: 1,
-    totalKids: 1,
-    status: "Canceled",
-  }
-];
+
 
 const BookingHistory = () => {
-    const [showBookingDetails, setShowBookingDetails] = useState(false); 
-    const [showDetails , setShowDetails] = useState<BookingHistory|null>(null) 
+  const [showBookingDetails, setShowBookingDetails] = useState(false);
+  const [showDetails, setShowDetails] = useState<BookingHistory | null>(null)
+  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
+  const [status, setStatus] = useState("");
+  const limit = 7
+  const { data: allBookings, refetch } = useGetBookingHistoryQuery({ search, page, limit, status });
+  const [updateBookingStatus] = useUpdateBookingStatusMutation();
+  console.log("allBookings", allBookings);
 
-const statusOptions = ["Completed", "Pending", "Canceled"];
- 
-const columns: ColumnsType<any> = [
-  {
-    title: "S/N",
-    dataIndex: "key",
-    key: "key",
-  },
-  {
-    title: "Date",
-    dataIndex: "date",
-    key: "date",
-  },
-  {
-    title: "Pickup City",
-    dataIndex: "pickupCity",
-    key: "pickupCity",
-  },
-  {
-    title: "Drop Off City",
-    dataIndex: "dropOffCity",
-    key: "dropOffCity",
-  },
-  {
-    title: "Distance (km)",
-    dataIndex: "distance",
-    key: "distance",
-  },
-  
-  {
-    title: "Service Name",
-    dataIndex: "serviceName",
-    key: "serviceName",
-  },
-  {
-    title: "Price ($)",
-    dataIndex: "price",
-    key: "price",
-  },
-  {
-    title: "Status",
-    dataIndex: "status",
-    key: "status",
-    render: (status: string) => {
-      let color = "default";
-      if (status === "Completed") color = "green";
-      else if (status === "Pending") color = "orange";
-      else if (status === "Canceled") color = "red";
-      return <Tag color={color}>{status}</Tag>;
+  const handleStatusChange = (id: any, value: string) => { 
+    const data = { 
+      id,
+      status: value
+    }
+    updateBookingStatus(data).then((res) => { 
+      console.log("edit response", res);
+      if (res?.data?.success) {
+        Swal.fire({
+          text: res?.data?.message,
+          icon: "success",
+          showConfirmButton: false,
+          timer: 1500,
+        }).then(() => {
+          refetch();
+        });
+      } else {
+        Swal.fire({
+          title: "Oops",
+          //@ts-ignore
+          text: res?.error?.data?.message,
+          icon: "error",
+          timer: 1500,
+          showConfirmButton: false,
+        });
+      }
+    });
+  }
+
+  const bookingsData = allBookings?.data?.data?.map((item: any, index: number) => ({
+    key: index + 1,
+    date: moment(item?.date).format("YYYY-MM-DD"),
+    pickupCity: item?.pickup_location,
+    dropOffCity: item?.dropoff_location,
+    distance: item?.distance,
+    className: item?.provider?.name,
+    classImage: "/car.svg",
+    serviceName: item?.service?.name,
+    serviceImage: item?.service?.image?.startsWith('http') ? item?.service?.image : `${imageUrl}${item?.service?.image}`,
+    price: item?.total_price,
+    totalAdults: item?.adults,
+    totalKids: item?.kids,
+    status: item?.status,
+    id: item?._id,
+    userName: item?.user?.name,
+    email: item?.user?.email
+  }));
+
+  const columns: ColumnsType<any> = [
+    {
+      title: "S/N",
+      dataIndex: "key",
+      key: "key",
     },
-  },
-  {
-    title: "Action",
-    key: "action",
-    render: (_, record) => (
-      <div className='flex items-center gap-4'> 
-        <p onClick={() =>{ setShowDetails(record); setShowBookingDetails(true)}} className='cursor-pointer'> <ImInfo className='text-primary' size={20} /> </p>
-        <Select
-          defaultValue={record.status}
-          style={{ width: 120 }}
-          onChange={(value) => {
-            console.log("Updated status for:", record.serial, "->", value);
-            // You can also trigger a backend update here
-          }}
-          options={statusOptions.map(status => ({ label: status, value: status }))}
-        />
-      </div>
-    ),
-  },
-];
+    {
+      title: "User",
+      dataIndex: "userName",
+      key: "userName",
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+    },
 
-    return (
-        <div className="">
-            <div className="flex justify-between items-center">
-                <div>
-                    <h1 className="text-2xl text-primary font-semibold">Booking History</h1>
-                </div>
-                <div className="flex items-center gap-5 justify-end mb-5">
-                    <Input
-                        style={{
-                            maxWidth: 300,
-                            height: 42,
-                        }}
-                        placeholder="Search"
-                        prefix={<SearchOutlined />}
-                    />
+    {
+      title: "Distance (km)",
+      dataIndex: "distance",
+      key: "distance",
+    },
 
-                    {/* Dropdown Filter */}
-                    <Select defaultValue="All" className="w-52 h-[42px]">
-                        <Option value="All">All</Option>
-                        <Option value="Completed">Completed</Option>
-                        <Option value="Pending">Pending</Option>
-                        <Option value="Canceled">Canceled</Option>
-                    </Select>
-                </div>
-            </div>
-            <Table columns={columns} dataSource={bookingsData} rowClassName="hover:bg-gray-100" pagination={{ pageSize: 9}} />
-            <CustomModal
-                open={showBookingDetails}
-                setOpen={setShowBookingDetails}
-                body={<BookingDetailsModal showDetails={showDetails} />}
-                key={'influencer-details'}
-                width={550}
-            />
+    {
+      title: "Service Name",
+      dataIndex: "serviceName",
+      key: "serviceName",
+    },
+    {
+      title: "Date",
+      dataIndex: "date",
+      key: "date",
+    },
+    {
+      title: "Price ($)",
+      dataIndex: "price",
+      key: "price",
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      render: (status: string) => {
+        let color = "default";
+        if (status === "confirmed") color = "green";
+        else if (status === "pending") color = "orange";
+        else if (status === "cancelled") color = "red";
+        return <Tag color={color}>{status}</Tag>;
+      },
+    },
+    {
+      title: "Action",
+      key: "action",
+      render: (_, record) => (
+        <div className='flex items-center gap-4'>
+          <p onClick={() => { setShowDetails(record); setShowBookingDetails(true) }} className='cursor-pointer'> <ImInfo className='text-primary' size={20} /> </p>
+
+          <Select defaultValue={record.status} className="w-32 h-[42px]" onChange={(value) => handleStatusChange(record?.id, value)}>
+            <Option value="confirmed">Completed</Option>
+            <Option value="pending">Pending</Option>
+            <Option value="cancelled">Canceled</Option>
+          </Select>
         </div>
-    );
+      ),
+    },
+  ];
+
+  return (
+    <div className="">
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl text-primary font-semibold">Booking History</h1>
+        </div>
+        <div className="flex items-center gap-5 justify-end mb-5">
+          <Input
+            style={{
+              maxWidth: 300,
+              height: 42,
+            }}
+            placeholder="Search"
+            prefix={<SearchOutlined />}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+
+          {/* Dropdown Filter */}
+          <Select defaultValue="All" className="w-52 h-[42px]" onChange={(value) => setStatus(value)} >
+            <Option value="All">All</Option>
+            <Option value="confirmed">Completed</Option>
+            <Option value="pending">Pending</Option>
+            <Option value="cancelled">Canceled</Option>
+          </Select>
+        </div>
+      </div>
+      <Table columns={columns} dataSource={bookingsData} rowClassName="hover:bg-gray-100" pagination={false} />
+      {
+        allBookings?.data?.getPaginationInfo?.total >= 7 &&
+        <div className="flex justify-end mt-5">
+          <Pagination
+            current={page}
+            total={allBookings?.data?.getPaginationInfo?.total}
+            pageSize={allBookings?.data?.getPaginationInfo?.limit}
+            onChange={(page) => setPage(page)}
+          />
+        </div>
+      }
+      <CustomModal
+        open={showBookingDetails}
+        setOpen={setShowBookingDetails}
+        body={<BookingDetailsModal showDetails={showDetails} />}
+        key={'influencer-details'}
+        width={550}
+      />
+    </div>
+  );
 };
 
 export default BookingHistory;
