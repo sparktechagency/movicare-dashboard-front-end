@@ -210,7 +210,7 @@ const AddServicesModal = ({
                 <Form.Item>
                     <div className="flex justify-center w-full mt-4">
                         <Button type="primary" htmlType="submit" style={{ height: 40 }}>
-                            {editData ? "Update Class" : "Create Class"}
+                            {editData ? "Update Service" : "Create Service"}
                         </Button>
                     </div>
                 </Form.Item>
