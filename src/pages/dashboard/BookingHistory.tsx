@@ -38,7 +38,7 @@ const BookingHistory = () => {
   const [status, setStatus] = useState("");
   const limit = 7
   const { data: allBookings, refetch } = useGetBookingHistoryQuery({ search, page, limit, status });
-  const [updateBookingStatus] = useUpdateBookingStatusMutation();
+  const [updateBookingStatus] = useUpdateBookingStatusMutation(); 
 
   const handleStatusChange = (id: any, value: string) => { 
     const data = { 
@@ -68,7 +68,7 @@ const BookingHistory = () => {
     });
   }
 
-  const bookingsData = allBookings?.data?.data?.map((item: any, index: number) => ({
+  const bookingsData = allBookings?.data?.map((item: any, index: number) => ({
     key: index + 1,
     date: moment(item?.date).format("YYYY-MM-DD"),
     pickupCity: item?.pickup_location,
