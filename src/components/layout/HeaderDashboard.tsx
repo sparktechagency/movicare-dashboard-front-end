@@ -13,7 +13,7 @@ const HeaderDashboard = () => {
 
        useEffect(() => {
   
-      const socket = io('http://119.148.56.246:5001', {
+      const socket = io('http://31.97.171.35:5001', {
         query: { token: localStorage.getItem("accessToken") }, 
       });
       socket.on('getNotifications::680e159d9d0ea49958c8be49', () => {
